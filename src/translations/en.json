@@ -1,0 +1,19 @@
+{
+    "welcome": "Welcome to my trade list! These are all the pokemon I own, do you like any?",
+    "welcome2": "Click on any pokemon for more information!",
+    "shortlistIntro": "In here you can keep track of pokemon you like and want to trade for!",
+    "shortlistIntro2": "Just go to the other list, click any, and press 'add to short list!'",
+    "shortlistIntro3": "This list is saved on your device!",
+    "instructions": "If you see something you like, click it so it becomes full screen and show it to me, or add it to your shortlist!",
+    "friendCode": "Copy My Pokémon Go Friend Code",
+    "friendCodeCopied": "Friend code copied to clipboard!",
+    "all": "ALL",
+    "showAll": "Show my pokemon",
+    "showShortlist": "Show your shortlist",
+    "pokemonAddedToShortlist": "added to your shortlist!",
+    "pokemonRemovedFromShortlist": "removed from your shortlist!",
+    "removeFromShortlist": "Remove from shortlist",
+    "addToShortlist": "Add to shortlist",
+    "capturedAt": "Captured at"
+  }
+  
