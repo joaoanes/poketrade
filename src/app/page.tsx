@@ -137,8 +137,7 @@ function Home() {
           <div>{showTradeList ? (
             <div style={{ textAlign: 'center', fontSize: 12 }}>
               <div>{t('shortlistIntro')}</div>
-              <div>{t('shortlistIntro2')}</div>
-              <div>{t('shortlistIntro3')}</div>
+              <div style={{fontSize: 8}}>{t('shortlistIntro2')}</div>
             </div>
           ) : (
             <div style={{ textAlign: 'center',  fontSize: 12 }}>
@@ -161,11 +160,11 @@ function Home() {
       </main>
       <div className={styles.footer}>
         <button className={styles.button} onClick={copyFriendCodeToClipboard}>{t('friendCode')}</button>
-        <div style={{textAlign: "right", marginRight: 20}}>{t('instructions')}</div>
+        <div style={{textAlign: "right", marginRight: 20, fontSize: "x-small"}}>{t('instructions')}</div>
       </div>
 
-      <div className={styles.languageToggle} onClick={toggleLanguage}>
-        {language === 'en' ? '日本語' : 'English'}
+      <div className="ribbon ribbon-top-right" onClick={toggleLanguage}>
+        <span>{language === 'en' ? '日本語' : 'English'}</span>
       </div>
     </div>
   );
