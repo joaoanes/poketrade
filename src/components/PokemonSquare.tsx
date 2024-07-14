@@ -4,8 +4,8 @@ import styles from "../app/page.module.css";
 import React from "react";
 import DelayedLazyLoad from './DelayedLazyLoad';
 import { UsefulPokemon } from "../junkyard/pokegenieParser";
-import { S3_BUCKET_URL } from "@/junkyard/env";
-
+//import { S3_BUCKET_URL } from "@/junkyard/env";
+const S3_BUCKET_URL = "https://poketrade.s3.eu-west-1.amazonaws.com"
 
 export type PokemonSquareProps = {
   pokemon: UsefulPokemon

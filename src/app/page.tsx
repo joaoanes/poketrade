@@ -9,7 +9,9 @@ import VirtualPokeList from "../components/VirtualPokeList";
 import { useTranslation, LanguageProvider, TranslationKeys } from '../junkyard/useTranslation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { S3_BUCKET_URL } from "@/junkyard/env";
+// import { S3_BUCKET_URL } from "@/junkyard/env";
+// TODO FIX THIS
+const S3_BUCKET_URL = "https://poketrade.s3.eu-west-1.amazonaws.com"
 
 const TYPED_MONS: UsefulPokemonArray[] = mons as UsefulPokemonArray[];
 
