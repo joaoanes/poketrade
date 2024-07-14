@@ -9,6 +9,7 @@ import VirtualPokeList from "../components/VirtualPokeList";
 import { useTranslation, LanguageProvider, TranslationKeys } from '../junkyard/useTranslation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { S3_BUCKET_URL } from "@/junkyard/env";
 
 const TYPED_MONS: UsefulPokemonArray[] = mons as UsefulPokemonArray[];
 
@@ -30,7 +31,7 @@ const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({ selectedPok
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.infoBox}>
           <div className={styles.left}>
-            <img className={styles.bigImg} src={`./data/pokeimg_2/${selectedPokemon.imageId}.png`} alt={translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)}></img>
+            <img className={styles.bigImg} src={`${S3_BUCKET_URL}/pokes/${selectedPokemon.imageId}.png`} alt={translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)}></img>
           </div>
           <div className={styles.right}>
             <div className={styles.modalName}>{translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)} <span className={styles.modalNumber}>#{selectedPokemon.pokemonNumber}</span></div>

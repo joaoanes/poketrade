@@ -4,6 +4,7 @@ import styles from "../app/page.module.css";
 import React from "react";
 import DelayedLazyLoad from './DelayedLazyLoad';
 import { UsefulPokemon } from "../junkyard/pokegenieParser";
+import { S3_BUCKET_URL } from "@/junkyard/env";
 
 
 export type PokemonSquareProps = {
@@ -16,9 +17,9 @@ export const PokemonSquare: React.FC<PokemonSquareProps> = ({ pokemon, quick }) 
     <div className={styles.pokeSquare}>
       {
         quick 
-        ? <img className={styles.pokeImg} alt={pokemon.pokemonName} src={`./data/pokethumbs/${pokemon.imageId}.png`}></img>
+        ? <img className={styles.pokeImg} alt={pokemon.pokemonName} src={`${S3_BUCKET_URL}/thumbs/${pokemon.imageId}.png`}></img>
         : <DelayedLazyLoad height={100} delay={1000}>
-            <img className={styles.pokeImg} alt={pokemon.pokemonName} src={`./data/pokethumbs/${pokemon.imageId}.png`}></img>
+            <img className={styles.pokeImg} alt={pokemon.pokemonName} src={`${S3_BUCKET_URL}/thumbs/${pokemon.imageId}.png`}></img>
         </DelayedLazyLoad>
   
       }
