@@ -1,5 +1,6 @@
 "use client";
 
+import Select from 'react-select'
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import styles from "./page.module.css";
 import mons from '../../public/data/filteredArray.json';
@@ -66,7 +67,7 @@ function Home() {
   const [showTradeList, setShowTradeList] = useState(false);
 
   const handleFilterChange = useCallback((e: any) => {
-    const wantedMonNumber = e.target.value;
+    const wantedMonNumber = e.value;
     setFilter(wantedMonNumber);
   }, []);
 
@@ -132,7 +133,10 @@ function Home() {
       )}
       <main className={styles.main}>
         <div className={styles.header}>
-          <button className={styles.button} onClick={() => setShowTradeList(!showTradeList)}>
+          <button className={styles.button} onClick={() => {
+            setFilter("ALL")
+            setShowTradeList(!showTradeList)
+          }}>
             {showTradeList ? t('showAll') : `${t('showShortlist')} (${tradeList.length}) `}
           </button>
           <div>{showTradeList ? (
@@ -147,13 +151,19 @@ function Home() {
             </div>
           )
           }</div>
-
-          <select onChange={handleFilterChange} className={styles.selectButton}>
-            <option value="ALL">{t('all')}</option>
-            {uniquePokemonNumbers.map((num, i) => (
-              <option key={i} value={num}>{`#${num} - ${translatePokemonName(num as any)}`}</option>
-            ))}
-          </select>
+          <Select
+            className={styles.selectButton}
+            backspaceRemovesValue
+            value={{value: currentFilter, label: currentFilter === "ALL" ? "ALL" : `#${currentFilter} - ${translatePokemonName(currentFilter as any)}`}} 
+            onChange={handleFilterChange}
+            options={[
+              { value: "ALL", label: t('ALL') },
+              ...(
+                uniquePokemonNumbers.map((num, i) => (
+                  {value: num, label: `#${num} - ${translatePokemonName(num as any)}`}
+                ))
+              )
+            ]} />
         </div>
         <div className={styles.content}>
           <VirtualPokeList setSelected={setSelectedPkmn} pokemons={filteredPokemons} />
@@ -164,8 +174,8 @@ function Home() {
         <div style={{textAlign: "right", marginRight: 20, fontSize: "x-small"}}>{t('instructions')}</div>
       </div>
 
-      <div className="ribbon ribbon-top-right" onClick={toggleLanguage}>
-        <span>{language === 'en' ? '日本語' : 'English'}</span>
+      <div className="ribbon ribbon-top-right" >
+        <span onClick={toggleLanguage}>{language === 'en' ? '日本語' : 'English'}</span>
       </div>
     </div>
   );
