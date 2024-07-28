@@ -17,9 +17,7 @@ export const PokemonSquare: React.FC<PokemonSquareProps> = ({ pokemon, quick }) 
       {
         quick 
         ? <img className={styles.pokeImg} alt={pokemon.pokemonName} src={`${S3_BUCKET_URL}/thumbs/${pokemon.imageId}.png`}></img>
-        : <DelayedLazyLoad height={100} delay={1000}>
-            <img className={styles.pokeImg} alt={pokemon.pokemonName} src={`${S3_BUCKET_URL}/thumbs/${pokemon.imageId}.png`}></img>
-        </DelayedLazyLoad>
+        : <DelayedLazyLoad height={100} delay={1000} className={styles.pokeImg} alt={pokemon.pokemonName} src={`${S3_BUCKET_URL}/thumbs/${pokemon.imageId}.png`} />
   
       }
       

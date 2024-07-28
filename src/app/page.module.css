@@ -26,8 +26,6 @@
   border-radius: 125px;
 }
 
-.left {}
-
 .modalContainer {
   position: fixed;
   z-index: 10;

@@ -2,18 +2,22 @@ import React, { useState, useEffect } from 'react';
 import styles from '../app/spinner.module.css'
 
 type DelayedLazyLoadProps = {
-  children: React.ReactNode;
   delay?: number;
   height: number;
   placeholder?: React.ReactNode;
+  className: string,
+  alt: string,
+  src: string,
 };
 
-const DelayedLazyLoad: React.FC<DelayedLazyLoadProps> = ({ children, delay = 1000, height, placeholder }) => {
-  const [shouldLoad, setShouldLoad] = useState(false);
+type PossibleImageStates = 'delayed' | 'loading' | 'loaded'
+
+const DelayedLazyLoad: React.FC<DelayedLazyLoadProps> = ({ delay = 1000, height, placeholder, className, alt, src }) => {
+  const [shouldLoad, setShouldLoad]  = useState<PossibleImageStates>('delayed');
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShouldLoad(true);
+      setShouldLoad('loading');
     }, delay);
 
     return () => clearTimeout(timer);
@@ -31,11 +35,12 @@ const DelayedLazyLoad: React.FC<DelayedLazyLoadProps> = ({ children, delay = 100
     >
       <div className={styles.spinner}/>
     </div>
-  );
+  )
 
   return (
     <div style={{ height }}>
-      {shouldLoad ? children : (placeholder || defaultPlaceholder)}
+      { ['delayed', 'loading'].includes(shouldLoad) ? (placeholder || defaultPlaceholder) : null }
+      { ['loading', 'loaded'].includes(shouldLoad) ? <img onLoad={() =>  setShouldLoad('loaded')} className={className} alt={alt} src={src} /> : null }
     </div>
   );
 };

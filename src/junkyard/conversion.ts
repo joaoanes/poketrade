@@ -12,7 +12,7 @@ export const convert: (bigMon: PokeGenieMon) => UsefulPokemon = ({
     imageId,
     captureDay,
     captureMonth,
-    captureYear
+    captureYear,
 }) => (
     {
         pokemonName,

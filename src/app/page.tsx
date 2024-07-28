@@ -31,7 +31,7 @@ const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({ selectedPok
     <div onClick={() => setSelected(null)} className={styles.modalContainer}>
       <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
         <div className={styles.infoBox}>
-          <div className={styles.left}>
+          <div>
             <img className={styles.bigImg} src={`${S3_BUCKET_URL}/pokes/${selectedPokemon.imageId}.png`} alt={translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)}></img>
           </div>
           <div className={styles.right}>
