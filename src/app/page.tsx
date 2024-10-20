@@ -3,6 +3,7 @@
 import Select from 'react-select'
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import styles from "./page.module.css";
+import ribbonStyles from "./ribbon.module.css";
 import mons from '../../public/data/filteredArray.json';
 import { UsefulPokemon, UsefulPokemonArray } from "../junkyard/pokegenieParser";
 import { convertFromArray } from "../junkyard/conversion";
@@ -10,11 +11,11 @@ import VirtualPokeList from "../components/VirtualPokeList";
 import { useTranslation, LanguageProvider, TranslationKeys } from '../junkyard/useTranslation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { S3_BUCKET_URL } from "@/junkyard/env";
+import { SelectedPokemonModal } from '../components/SelectedPokemonModal';
 
 const TYPED_MONS: UsefulPokemonArray[] = mons as UsefulPokemonArray[];
 
-type SelectedPokemonModalProps = {
+export type SelectedPokemonModalProps = {
   selectedPokemon: UsefulPokemon;
   translatePokemonName: (any: any) => string;
   setSelected: (any: any) => void;
@@ -24,32 +25,7 @@ type SelectedPokemonModalProps = {
   t: (arg: TranslationKeys) => string;
 }
 
-const getPokemonNumberPadded: (arg: number) => string = (pokemonNumber: number) => pokemonNumber.toString().padStart(3, '0');
-
-const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({ selectedPokemon, setSelected, addToTradeList, removeFromTradeList, isOnTradeList, translatePokemonName, t }) => {
-  return (
-    <div onClick={() => setSelected(null)} className={styles.modalContainer}>
-      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.infoBox}>
-          <div>
-            <img className={styles.bigImg} src={`${S3_BUCKET_URL}/pokes/${selectedPokemon.imageId}.png`} alt={translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)}></img>
-          </div>
-          <div className={styles.right}>
-            <div className={styles.modalName}>{translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)} <span className={styles.modalNumber}>#{selectedPokemon.pokemonNumber}</span></div>
-            <div className={styles.modalCp}>CP: {selectedPokemon.cp}</div>
-            <div className={styles.modalCaptured}>{t("capturedAt")}: {selectedPokemon.captureDate}</div>
-            {isOnTradeList ? (
-              <button className={styles.button} onClick={() => removeFromTradeList(selectedPokemon)}>{t('removeFromShortlist')}</button>
-            ) : (
-              <button className={styles.button} onClick={() => addToTradeList(selectedPokemon)}>{t('addToShortlist')}</button>
-            )}
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
-}
+export const getPokemonNumberPadded: (arg: number) => string = (pokemonNumber: number) => pokemonNumber.toString().padStart(3, '0');
 
 function Home() {
 
@@ -107,10 +83,11 @@ function Home() {
     toast.success(t('friendCodeCopied'));
   }, [t]);
 
-  const toggleLanguage = useCallback(() => {
-    const newLang = language === 'en' ? 'jp' : 'en';
-    setLanguage(newLang);
-  }, [language, setLanguage]);
+  const toggleLanguage = useCallback(
+    () => 
+      setLanguage(language === 'en' ? 'jp' : 'en'), 
+    [language, setLanguage]
+  );
 
   const uniquePokemonNumbers = useMemo(() => {
     const listToUse = showTradeList ? tradeList : TYPED_MONS.map((mon) => convertFromArray(mon));
@@ -133,7 +110,28 @@ function Home() {
       )}
       <main className={styles.main}>
         <div className={styles.header}>
-          <button className={styles.button} onClick={() => {
+
+          <Select
+            className={styles.selectButton}
+            backspaceRemovesValue
+            value={{value: currentFilter, label: currentFilter === "ALL" ? t("all") : `#${currentFilter} - ${translatePokemonName(currentFilter as any)}`}} 
+            onChange={handleFilterChange}
+            options={[
+              { value: "ALL", label: t('all') },
+              ...(
+                uniquePokemonNumbers.map((num, i) => (
+                  {value: num, label: `#${num} - ${translatePokemonName(num as any)}`}
+                ))
+              )
+            ]} />
+        </div>
+        <div className={styles.content}>
+          <VirtualPokeList setSelected={setSelectedPkmn} pokemons={filteredPokemons} />
+        </div>
+      </main>
+      <div className={styles.footer}>
+        <button className={styles.button} onClick={copyFriendCodeToClipboard}>{t('friendCode')}</button>
+        <button className={styles.button} onClick={() => {
             setFilter("ALL")
             setShowTradeList(!showTradeList)
           }}>
@@ -151,30 +149,10 @@ function Home() {
             </div>
           )
           }</div>
-          <Select
-            className={styles.selectButton}
-            backspaceRemovesValue
-            value={{value: currentFilter, label: currentFilter === "ALL" ? "ALL" : `#${currentFilter} - ${translatePokemonName(currentFilter as any)}`}} 
-            onChange={handleFilterChange}
-            options={[
-              { value: "ALL", label: t('ALL') },
-              ...(
-                uniquePokemonNumbers.map((num, i) => (
-                  {value: num, label: `#${num} - ${translatePokemonName(num as any)}`}
-                ))
-              )
-            ]} />
-        </div>
-        <div className={styles.content}>
-          <VirtualPokeList setSelected={setSelectedPkmn} pokemons={filteredPokemons} />
-        </div>
-      </main>
-      <div className={styles.footer}>
-        <button className={styles.button} onClick={copyFriendCodeToClipboard}>{t('friendCode')}</button>
         <div style={{textAlign: "right", marginRight: 20, fontSize: "x-small"}}>{t('instructions')}</div>
       </div>
 
-      <div className="ribbon ribbon-top-right" >
+      <div className={`${ribbonStyles.ribbon} ${ribbonStyles.ribbonTopRight}`} >
         <span onClick={toggleLanguage}>{language === 'en' ? '日本語' : 'English'}</span>
       </div>
     </div>

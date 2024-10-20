@@ -55,6 +55,7 @@ export type PokeGenieMon =
     "defendingGym": boolean,
     "dust": number,
     "favSelection": number,
+    "form": "Normal" | "Alola" | string,
     "gender": number,
     "hatchedFromEgg": boolean,
     "height": string | '',

@@ -8,7 +8,7 @@
     border: 4px solid black;
     box-shadow: inset -8px -4px 0 0 rgba(0, 0, 0, 0.2);
     animation: shake 1.25s cubic-bezier(0.36, 0.07, 0.19, 0.97) infinite, catch 0.5s ease-out 1.5s forwards;
-    will-change: transform; /* Optimize for performance */
+    will-change: transform;
   }
   
   @keyframes shake {
