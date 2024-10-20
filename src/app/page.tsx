@@ -67,15 +67,26 @@ function Home() {
     setSelectedPkmn(null);
   }, [t, translatePokemonName]);
 
+  const allPokemons = useMemo(() => {
+    return TYPED_MONS.map((mon) => convertFromArray(mon));
+  }, []);
+  
+  const listToShow = useMemo(() => {
+    return showTradeList ? tradeList : allPokemons;
+  }, [showTradeList, tradeList, allPokemons]);
+  
   const filteredPokemons = useMemo(() => {
-    const listToShow = showTradeList ? tradeList : TYPED_MONS.map((mon) => convertFromArray(mon));
     return listToShow.filter((mon) => {
       if (!currentFilter || currentFilter === "ALL") {
         return true;
       }
       return mon.pokemonNumber.toString().padStart(3, '0') === currentFilter;
     });
-  }, [currentFilter, showTradeList, tradeList]);
+  }, [listToShow, currentFilter]);
+  
+  const setSelected = useCallback((pokemon : UsefulPokemon) => {
+    setSelectedPkmn(pokemon);
+  }, []);
 
   const copyFriendCodeToClipboard = useCallback(async () => {
     const friendCode = "276625381166";
@@ -102,7 +113,7 @@ function Home() {
           t={t}
           translatePokemonName={translatePokemonName}
           selectedPokemon={selectedPokemon}
-          setSelected={setSelectedPkmn}
+          setSelected={setSelected}
           addToTradeList={addToTradeList}
           removeFromTradeList={removeFromTradeList}
           isOnTradeList={tradeList.findIndex(p => p.imageId === selectedPokemon.imageId) !== -1}
@@ -126,7 +137,7 @@ function Home() {
             ]} />
         </div>
         <div className={styles.content}>
-          <VirtualPokeList setSelected={setSelectedPkmn} pokemons={filteredPokemons} />
+          <VirtualPokeList setSelected={setSelected} pokemons={filteredPokemons} />
         </div>
       </main>
       <div className={styles.footer}>
