@@ -4,7 +4,7 @@ import Select from 'react-select'
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import styles from "./page.module.css";
 import ribbonStyles from "./ribbon.module.css";
-import mons from '../../public/data/filteredArray.json';
+import mons from '../../public/data/filteredArrayWithShiny.json';
 import { UsefulPokemon, UsefulPokemonArray } from "../junkyard/pokegenieParser";
 import { convertFromArray } from "../junkyard/conversion";
 import VirtualPokeList from "../components/VirtualPokeList";
@@ -12,6 +12,9 @@ import { useTranslation, LanguageProvider, TranslationKeys } from '../junkyard/u
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { SelectedPokemonModal } from '../components/SelectedPokemonModal';
+import { isShiny } from '@/junkyard/shinySupport';
+import { ShinyCircle } from '@/components/PokeCircle';
+import { getPokemonNumberPadded } from '@/junkyard/misc';
 
 const TYPED_MONS: UsefulPokemonArray[] = mons as UsefulPokemonArray[];
 
@@ -24,8 +27,6 @@ export type SelectedPokemonModalProps = {
   isOnTradeList: boolean;
   t: (arg: TranslationKeys) => string;
 }
-
-export const getPokemonNumberPadded: (arg: number) => string = (pokemonNumber: number) => pokemonNumber.toString().padStart(3, '0');
 
 function Home() {
 
@@ -71,6 +72,8 @@ function Home() {
     return TYPED_MONS.map((mon) => convertFromArray(mon));
   }, []);
   
+  const [shiniesOnly, setShiniesOnly] = useState(false)
+
   const listToShow = useMemo(() => {
     return showTradeList ? tradeList : allPokemons;
   }, [showTradeList, tradeList, allPokemons]);
@@ -81,8 +84,8 @@ function Home() {
         return true;
       }
       return mon.pokemonNumber.toString().padStart(3, '0') === currentFilter;
-    });
-  }, [listToShow, currentFilter]);
+    }).filter((e) => shiniesOnly ? isShiny(e) : true);
+  }, [listToShow, currentFilter, shiniesOnly]);
   
   const setSelected = useCallback((pokemon : UsefulPokemon) => {
     setSelectedPkmn(pokemon);
@@ -99,6 +102,7 @@ function Home() {
       setLanguage(language === 'en' ? 'jp' : 'en'), 
     [language, setLanguage]
   );
+
 
   const uniquePokemonNumbers = useMemo(() => {
     const listToUse = showTradeList ? tradeList : TYPED_MONS.map((mon) => convertFromArray(mon));
@@ -121,7 +125,8 @@ function Home() {
       )}
       <main className={styles.main}>
         <div className={styles.header}>
-
+          <div onClick={(e) => setShiniesOnly(!shiniesOnly)} className={styles.shinyButton}><ShinyCircle position={"relative"} /></div>
+          <input checked={shiniesOnly} onClick={(e) => setShiniesOnly(!shiniesOnly)} type='checkbox'></input>
           <Select
             className={styles.selectButton}
             backspaceRemovesValue

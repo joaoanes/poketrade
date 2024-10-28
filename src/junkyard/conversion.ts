@@ -1,10 +1,10 @@
-import { PokeGenieMon, UsefulPokemon, UsefulPokemonArray } from "./pokegenieParser"
+import { PokeGenieMon, UsefulPokemon, UsefulPokemonArray, UsefulPokemonArrayWithoutShiny, UsefulPokemonWithoutShiny } from "./pokegenieParser"
 
 const ensure = (e: any) => {
     return e ? e : "??"
 }
 
-export const convert: (bigMon: PokeGenieMon) => UsefulPokemon = ({
+export const convert: (bigMon: PokeGenieMon) => UsefulPokemonWithoutShiny = ({
     pokemonName,
     pokemonNumber,
     cp,
@@ -24,7 +24,7 @@ export const convert: (bigMon: PokeGenieMon) => UsefulPokemon = ({
     }
 )
 
-export const convertToArray: (bigMon: UsefulPokemon) => UsefulPokemonArray = (originalMon) => (
+export const convertToArray: (bigMon: UsefulPokemonWithoutShiny) => UsefulPokemonArrayWithoutShiny = (originalMon) => (
     [
         originalMon.pokemonName,
         originalMon.pokemonNumber,
@@ -43,5 +43,6 @@ export const convertFromArray: (bigMon: UsefulPokemonArray) => UsefulPokemon = (
         shadowPokemon: arrayMon[3],
         imageId: arrayMon[4],
         captureDate: arrayMon[5],
+        shinyOutput: arrayMon[6],
     }
 )

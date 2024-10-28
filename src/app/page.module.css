@@ -22,8 +22,25 @@
   color: black;
 }
 
+.pokeImgContainer {
+  position: relative;
+}
+
 .pokeImg {
   border-radius: 125px;
+  height: 100px;
+  overflow: hidden;
+  position: relative;
+}
+
+.shiny {
+  z-index: 100;
+  border-radius: 125px;
+  background-color: white;
+  position: absolute;
+  width: 25px;
+  right: 0;
+  padding: 5px;
 }
 
 
@@ -107,10 +124,17 @@
 
 .header {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.2);
   width: 100%;
+}
+
+.shinyButton {
+  margin: 5px;
+  display: flex;
+  cursor: pointer;
 }
 
 .languageToggle {
@@ -158,7 +182,7 @@
   font-size: 16px;
   border-radius: 5px;
   margin: 10px 0;
-  min-width: 80%;
+  min-width: 70%;
 }
 
 .button {

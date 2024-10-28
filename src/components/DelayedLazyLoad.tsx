@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import styles from '../app/spinner.module.css'
+import spinnerStyles from '../app/spinner.module.css'
+import styles from "../app/page.module.css";
+import PokeCircle from './PokeCircle';
 
 type DelayedLazyLoadProps = {
   delay?: number;
@@ -8,11 +10,12 @@ type DelayedLazyLoadProps = {
   className: string,
   alt: string,
   src: string,
+  shiny: boolean,
 };
 
 type PossibleImageStates = 'delayed' | 'loading' | 'loaded'
 
-const DelayedLazyLoad: React.FC<DelayedLazyLoadProps> = ({ delay = 1000, height, placeholder, className, alt, src }) => {
+const DelayedLazyLoad: React.FC<DelayedLazyLoadProps> = ({ delay = 1000, height, placeholder, className, alt, src, shiny }) => {
   const [shouldLoad, setShouldLoad]  = useState<PossibleImageStates>('delayed');
 
   useEffect(() => {
@@ -33,14 +36,15 @@ const DelayedLazyLoad: React.FC<DelayedLazyLoadProps> = ({ delay = 1000, height,
         alignItems: 'center',
       }}
     >
-      <div className={styles.spinner}/>
+      <div className={spinnerStyles.spinner}/>
     </div>
   )
 
   return (
     <div style={{ height }}>
       { ['delayed', 'loading'].includes(shouldLoad) ? (placeholder || defaultPlaceholder) : null }
-      { ['loading', 'loaded'].includes(shouldLoad) ? <img onLoad={() =>  setShouldLoad('loaded')} className={className} alt={alt} src={src} /> : null }
+      { ['loading', 'loaded'].includes(shouldLoad) ? 
+      <PokeCircle setShouldLoad={setShouldLoad} alt={alt} src={src} shiny={shiny} /> : null }
     </div>
   );
 };

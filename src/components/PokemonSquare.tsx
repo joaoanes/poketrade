@@ -5,6 +5,8 @@ import React from "react";
 import DelayedLazyLoad from './DelayedLazyLoad';
 import { UsefulPokemon } from "../junkyard/pokegenieParser";
 import { S3_BUCKET_URL } from "@/junkyard/env";
+import { isShiny } from "@/junkyard/shinySupport";
+import PokeCircle from "./PokeCircle";
 
 export type PokemonSquareProps = {
   pokemon: UsefulPokemon
@@ -12,12 +14,13 @@ export type PokemonSquareProps = {
 }
 
 export const PokemonSquare: React.FC<PokemonSquareProps> = ({ pokemon, quick }) => {
+  const shiny = isShiny(pokemon)
   return (
     <div className={styles.pokeSquare}>
       {
         quick 
-        ? <img className={styles.pokeImg} alt={pokemon.pokemonName} src={`${S3_BUCKET_URL}/thumbs/${pokemon.imageId}.png`}></img>
-        : <DelayedLazyLoad height={100} delay={1000} className={styles.pokeImg} alt={pokemon.pokemonName} src={`${S3_BUCKET_URL}/thumbs/${pokemon.imageId}.png`} />
+        ? <PokeCircle alt={pokemon.pokemonName} shiny={shiny} src={`${S3_BUCKET_URL}/thumbs/${pokemon.imageId}.png`} />
+        : <DelayedLazyLoad shiny={shiny} height={100} delay={1000} className={styles.pokeImg} alt={pokemon.pokemonName} src={`${S3_BUCKET_URL}/thumbs/${pokemon.imageId}.png`} />
   
       }
       

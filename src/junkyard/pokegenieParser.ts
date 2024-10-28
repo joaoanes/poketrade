@@ -105,7 +105,7 @@ export type PokeGenieMon =
     "weight": NumberedString | ''
   }
 
-export type UsefulPokemon = {
+export type UsefulPokemonWithoutShiny = {
   pokemonName: string,
   pokemonNumber: number,
   cp: number,
@@ -114,15 +114,22 @@ export type UsefulPokemon = {
   captureDate: string,
 }
 
+export type UsefulPokemon = UsefulPokemonWithoutShiny & {
+  shinyOutput: number
+}
+
 type PokemonName = string
 type PokemonNumber = number
 type CP = number
 type ShadowPokemon = boolean
 type ImageId = string
 type CaptureDate = string
+type ShinyOutput = number
+
+export type UsefulPokemonArrayWithoutShiny = UsefulPokemonArray extends [...infer Rest, any] ? Rest : never
 
 export type UsefulPokemonArray = [
-  PokemonName, PokemonNumber, CP, ShadowPokemon, ImageId, CaptureDate
+  PokemonName, PokemonNumber, CP, ShadowPokemon, ImageId, CaptureDate, ShinyOutput
 ]
 // TODO: branded types???
 

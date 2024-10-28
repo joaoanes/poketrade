@@ -37,4 +37,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-images
+/images
+/support/images/thumbs
+/support/images/pokes
+/support/images/scans
