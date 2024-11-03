@@ -10,7 +10,7 @@ import Select from 'react-select'
 import VirtualPokeList from "./VirtualPokeList"
 import { ShinyCircle } from "./PokeCircle"
 
-import mons from '../../public/data/filteredArrayWithShiny.json'
+import mons from '../data/filteredArrayWithShiny.json'
 
 import layoutStyles from "@/styles/layout.module.css"
 import commonStyles from "@/styles/common.module.css"
@@ -18,9 +18,9 @@ import ribbonStyles from "../app/ribbon.module.css"
 import 'react-toastify/dist/ReactToastify.css'
 
 import { CollapsibleFooter } from "./CollapsibleFooter"
+import { createTabs, TabId } from "@/data/tabs"
 
 const TYPED_MONS: UsefulPokemonArray[] = mons as UsefulPokemonArray[]
-
 
 const useTradeList = () => {
   const [tradeList, setTradeList] = useState<UsefulPokemon[]>([])
@@ -42,7 +42,7 @@ const useTradeList = () => {
 
   const removePokemon = useCallback((pokemon: UsefulPokemon) => {
     setTradeList(prevList => {
-      const newList = prevList.filter(p => p.pokemonNumber !== pokemon.pokemonNumber)
+      const newList = prevList.filter(p => p.imageId !== pokemon.imageId)
       window.localStorage.setItem("cooltrainertradeList", JSON.stringify(newList))
       return newList
     })
@@ -86,12 +86,15 @@ export const Home = () => {
   } = useTradeList()
   const [selectedPokemon, setSelectedPkmn] = useState<UsefulPokemon | null>(null)
   const [showTradeList, setShowTradeList] = useState(false)
+  const [activeTab, setActiveTab] = useState<TabId | undefined>()
 
   const allPokemons = useMemo(() => TYPED_MONS.map(convertFromArray), [])
-  const listToShow = useMemo(
-    () => showTradeList ? tradeList : allPokemons, 
-    [showTradeList, tradeList, allPokemons]
-  )
+  const tabs = useMemo(() => createTabs(tradeList, allPokemons, t), [tradeList, t, allPokemons])
+  
+  const listToShow = useMemo(() => {
+    const activeTabData = tabs.find(tab => tab.id === activeTab)
+    return activeTabData ? activeTabData.getPokemons() : allPokemons
+  }, [activeTab, tabs, allPokemons])
 
   const {
     currentFilter,
@@ -138,9 +141,31 @@ export const Home = () => {
     return Array.from(new Set(listToUse.map(mon => mon.pokemonNumber))).map(num => getPokemonNumberPadded(num))
   }, [tradeList, showTradeList])
 
+  const handleTabClick = useCallback((tab: TabId) => {
+    setActiveTab(prev => prev === tab ? undefined : tab)
+  }, [])
+
   return (
     <div className={layoutStyles.mainContainer}>
-      <ToastContainer />
+      <div className={layoutStyles.tabContainer}>
+        {tabs.map((tab) => (
+          <button 
+            key={tab.id}
+            className={`${layoutStyles.tab} ${tab.header ? layoutStyles.tabHeader : ''} ${layoutStyles[tab.id]} ${activeTab === tab.id ? layoutStyles.activeTab : ''}`}
+            onClick={() => handleTabClick(tab.id)}
+          >
+            {activeTab === tab.id && tab.subtext && <span>{tab.subtext}</span>}
+            <img 
+              className={layoutStyles.star} 
+              src={tab.icon} 
+              alt={tab.id} 
+            />
+          </button>
+        ))}
+      </div>
+      <ToastContainer
+        closeOnClick
+      />
       {selectedPokemon && (
         <SelectedPokemonModal
           t={t}
@@ -191,10 +216,28 @@ export const Home = () => {
           />
         </div>
         <div className={layoutStyles.content}>
-          <VirtualPokeList
-            setSelected={setSelected}
-            pokemons={filteredPokemons}
-          />
+          {activeTab === "shortlist" && filteredPokemons.length === 0 ? (
+            <div className={layoutStyles.instructionsContainer}>
+              <div className={layoutStyles.instructions}>
+                <div className={layoutStyles.instructionsTitle}>{t("instructionsTitle")}</div>
+                {t("instructions")}
+              </div>
+            </div>
+          ) : (
+            <>
+              {activeTab && tabs.find(tab => tab.id === activeTab)?.title && (
+                <div className={layoutStyles.tabTitleContainer}>
+                  <div className={layoutStyles.tabTitle}>{tabs.find(tab => tab.id === activeTab)?.title}</div>
+                  <div className={layoutStyles.tabSubtitle}>{tabs.find(tab => tab.id === activeTab)?.subtitle}</div>
+                </div>
+              )}
+              <VirtualPokeList
+                setSelected={setSelected}
+                pokemons={filteredPokemons}
+                key={activeTab}
+              />
+            </>
+          )}
         </div>
       </main>
       

@@ -34,9 +34,10 @@ export const PokemonSquare: React.FC<PokemonSquareProps> = ({ pokemon, quick }) 
           />
       }
       <div className={styles.pokeCp}>
-        CP:
-        {' '}
-        {pokemon.cp}
+        <span className={styles.pokeCpText}>CP</span>
+        <span className={styles.pokeCpNumber}>  
+          {pokemon.cp}
+        </span>
       </div>
     </div>
   )

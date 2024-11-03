@@ -22,7 +22,7 @@
       "arrow": "parens-new-line"
     }],
     "@stylistic/jsx-one-expression-per-line": ["error", {
-      "allow": "single-child"
+      "allow": "non-jsx"
     }],
 
     "@stylistic/jsx-first-prop-new-line": ["error", "multiline"],

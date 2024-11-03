@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, FC } from 'react'
 import { FixedSizeGrid } from 'react-window'
 import { AutoSizer } from 'react-virtualized'
 import { UsefulPokemon } from "../junkyard/pokegenieParser"
@@ -10,9 +10,9 @@ type PokeListProps = {
   setSelected: (a: UsefulPokemon) => void;
 }
 
-const VirtualPokeList: React.FC<PokeListProps> = ({ pokemons, setSelected }) => {
+const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
   // Memoize grid calculations to prevent recalculations on every render
-  const getGridParams = React.useCallback(
+  const getGridParams = useCallback(
     ({ width, height }: { width: number, height: number }) => {
       const columnWidth = 100
       const rowHeight = 120
@@ -31,17 +31,19 @@ const VirtualPokeList: React.FC<PokeListProps> = ({ pokemons, setSelected }) => 
   )
 
   // Memoize item data to prevent unnecessary re-renders
-  const getItemData = React.useCallback((columnCount: number) => ({
+  const getItemData = useCallback((columnCount: number) => ({
     pokemons,
     columnCount,
     setSelected
   }), [pokemons, setSelected])
 
   // Memoize cell renderer to prevent recreation on every render
-  const Cell = React.useCallback(({
+  const Cell = useCallback(({
     rowIndex, columnIndex, style, data 
   }: any) => {
-    const { pokemons, columnCount, setSelected } = data
+    const { 
+      pokemons, columnCount, setSelected 
+    } = data
     const index = rowIndex * columnCount + columnIndex
     const pokemon = pokemons[index]
 
@@ -73,7 +75,14 @@ const VirtualPokeList: React.FC<PokeListProps> = ({ pokemons, setSelected }) => 
   return (
     <AutoSizer>
       {(size) => {
-        const { columnWidth, rowHeight, columnCount, rowCount, width, height } = getGridParams(size)
+        const { 
+          columnWidth, 
+          rowHeight, 
+          columnCount, 
+          rowCount, 
+          width, 
+          height 
+        } = getGridParams(size)
         const itemData = getItemData(columnCount)
 
         return (
@@ -85,8 +94,12 @@ const VirtualPokeList: React.FC<PokeListProps> = ({ pokemons, setSelected }) => 
             columnCount={columnCount}
             rowCount={rowCount}
             itemData={itemData}
-            itemKey={({ columnIndex, rowIndex, data }) => 
-              `${rowIndex}-${columnIndex}`} // Better key format
+            itemKey={
+              ({
+                columnIndex, rowIndex, data 
+              }) => 
+                `${data.pokemons[rowIndex * columnCount + columnIndex]?.imageId}`
+            } // Better key format
           >
             {Cell}
           </FixedSizeGrid>

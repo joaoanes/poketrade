@@ -21,5 +21,23 @@
 } 
 
 .pokeCp {
+  
   height: 20px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.pokeCpText {
+  color: #A2B6B6;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 2px;
+  margin-right: 2px;
+}
+
+.pokeCpNumber {
+  height: 20px;
+  color: #456A6D;
+  
+  font-weight: bold;
 }

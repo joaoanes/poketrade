@@ -6,7 +6,6 @@
 .pokeImg {
   border-radius: 125px;
   height: 100px;
-  overflow: hidden;
   position: relative;
 }
 

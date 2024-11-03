@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import styles from '@/styles/collapsibleFooter.module.css'
 import commonStyles from "@/styles/common.module.css"
 import React from 'react'
@@ -14,8 +14,6 @@ interface CollapsibleFooterProps {
 export const CollapsibleFooter = ({
   t,
   showTradeList,
-  tradeListLength,
-  onToggleTradeList,
   onCopyFriendCode
 }: CollapsibleFooterProps) => {
   const [isExpanded, setIsExpanded] = useState(true)
@@ -25,7 +23,7 @@ export const CollapsibleFooter = ({
       {isExpanded ? (
         <>
           <div className={styles.footerContent}>
-           
+
             <div>
               {showTradeList ? (
                 <div className={styles.messageText}>
@@ -39,39 +37,34 @@ export const CollapsibleFooter = ({
                 </div>
               )}
             </div>
-            <div className={styles.instructions}>
-              {t('instructions')}
-            </div>
-          </div>
 
-          <button
+            <button
               className={commonStyles.button}
               onClick={onCopyFriendCode}
             >
               {t('friendCode')}
             </button>
-            <button 
+          </div>
+
+          <button
             className={styles.collapseButton}
             onClick={() => setIsExpanded(false)}
           >
             ▼ {t('hideFooter')}
           </button>
-            <button
-              className={commonStyles.button}
-              onClick={onToggleTradeList}
-            >
-              {showTradeList ? t('showAll') : `${t('showShortlist')} (${tradeListLength})`}
-            </button>
+
         </>
       ) : (
         <div className={styles.collapsedContent}>
+          <div className={styles.collapsedButton}>
+            <button
+              className={commonStyles.button}
+              onClick={onCopyFriendCode}
+            >
+              {t('friendCode')}
+            </button>
+          </div>
           <button
-            className={commonStyles.button}
-            onClick={onCopyFriendCode}
-          >
-            {t('friendCode')}
-          </button>
-          <button 
             className={styles.expandButton}
             onClick={() => setIsExpanded(true)}
           >

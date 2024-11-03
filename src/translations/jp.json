@@ -14,5 +14,9 @@
     "pokemonRemovedFromShortlist": "があなたのショートリストから削除されました！",
     "removeFromShortlist": "ショートリストから削除",
     "addToShortlist": "ショートリストに追加",
-    "capturedAt": "捕まえた場所"
+    "capturedAt": "捕まえた場所",
+    "shortlistTitle": "Shortlist",
+    "shortlistSubtitle": "Shortlist subttitle",
+    "leagueTitle": "League Pokemon",
+    "leagueSubtitle": "High PVP IV pokemon"
 }

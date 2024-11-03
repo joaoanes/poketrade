@@ -80,6 +80,11 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
                 onClick={() => removeFromTradeList(selectedPokemon)}
               >
                 {t('removeFromShortlist')}
+                <img 
+                  width={25} 
+                  src="./star.svg" 
+                  alt="star"
+                />
               </button>
             ) : (
               <button
@@ -87,6 +92,11 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
                 onClick={() => addToTradeList(selectedPokemon)}
               >
                 {t('addToShortlist')}
+                <img
+                  width={25}
+                  src="./star.svg"
+                  alt="star"
+                />
               </button>
             )}
           </div>

@@ -3,7 +3,6 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 40vh;
   background-color: black;
   transition: height 0.3s ease-in-out;
   border-top: 1px solid var(--border-color);
@@ -17,6 +16,7 @@
   height: calc(100% - 30px);
   padding: 20px;
   display: flex;
+  margin-top: 20px;
   flex-direction: column;
   gap: 15px;
 }
@@ -40,10 +40,11 @@
   position: absolute;
   top: 5px;
   right: 20px;
-  background: none;
+  background: white;
+  padding: 5px;
   border: none;
   cursor: pointer;
-  color: var(--text-color);
+  color: black;
 }
 
 .collapsedContent {
@@ -54,9 +55,16 @@
   gap: 20px;
 }
 
+.collapsedButton {
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+}
+
 .expandButton {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--text-color);
+  padding: 20px;
+  font-size: 25px;
 } 
