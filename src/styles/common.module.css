@@ -1,0 +1,40 @@
+.button {
+  padding: 10px 20px;
+  font-size: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+  margin: 10px;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+.selectButton {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  margin: 10px 0;
+  min-width: 70%;
+}
+
+.shinyButton {
+  margin: 5px;
+  display: flex;
+  cursor: pointer;
+}
+
+.languageToggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 1000;
+} 

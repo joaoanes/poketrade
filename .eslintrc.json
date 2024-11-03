@@ -1,6 +1,24 @@
 {
-  "extends": "next/core-web-vitals",
+  "extends": [
+    "next/core-web-vitals",
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "rules": {
-    "@next/next/no-img-element": "off"
+    "@next/next/no-img-element": "off",
+    "max-len": ["error", {
+      "code": 100, 
+      "tabWidth": 2,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true,
+      "ignoreComments": true
+    }],
+    "react/jsx-max-props-per-line": ["error", { 
+      "maximum": 1,
+      "when": "multiline" 
+    }],
+    "react/jsx-first-prop-new-line": ["error", "multiline"],
+    "react/jsx-closing-bracket-location": ["error", "line-aligned"],
+    "react/jsx-closing-tag-location": "error"
   }
 }

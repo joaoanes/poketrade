@@ -1,4 +1,4 @@
-import styles from '../app/page.module.css'
+import styles from '../styles/pokecircle.module.css'
 
 type PokeCircleProps = {
     setShouldLoad?: (arg: any) => unknown

@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
-import styles from "../app/page.module.css";
+import styles from "@/styles/pokesquare.module.css";
 import React from "react";
 import DelayedLazyLoad from './DelayedLazyLoad';
 import { UsefulPokemon } from "../junkyard/pokegenieParser";

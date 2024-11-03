@@ -1,9 +1,24 @@
 "use client";
 import React from "react";
-import styles from "../app/page.module.css";
+import styles from "@/styles/modal.module.css";
+import buttonStyles from "@/styles/common.module.css";
 import { S3_BUCKET_URL } from "@/junkyard/env";
-import { SelectedPokemonModalProps } from '../app/page';
 import { getPokemonNumberPadded } from "@/junkyard/misc";
+import { UsefulPokemon } from "@/junkyard/pokegenieParser";
+import { TranslationKeys } from "@/junkyard/useTranslation";
+
+
+export type SelectedPokemonModalProps = {
+  selectedPokemon: UsefulPokemon;
+  translatePokemonName: (any: any) => string;
+  setSelected: (any: any) => void;
+  addToTradeList: (pokemon: UsefulPokemon) => void;
+  removeFromTradeList: (pokemon: UsefulPokemon) => void;
+  isOnTradeList: boolean;
+  t: (arg: TranslationKeys) => string;
+}
+
+
 
 export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({ selectedPokemon, setSelected, addToTradeList, removeFromTradeList, isOnTradeList, translatePokemonName, t }) => {
   return (
@@ -19,9 +34,9 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({ sele
             {window?.location.toString() === "http://localhost:3000/" && <div className={styles.modalCp}>shiny output: {selectedPokemon.shinyOutput}</div>}
             <div className={styles.modalCaptured}>{t("capturedAt")}: {selectedPokemon.captureDate}</div>
             {isOnTradeList ? (
-              <button className={styles.button} onClick={() => removeFromTradeList(selectedPokemon)}>{t('removeFromShortlist')}</button>
+              <button className={buttonStyles.button} onClick={() => removeFromTradeList(selectedPokemon)}>{t('removeFromShortlist')}</button>
             ) : (
-              <button className={styles.button} onClick={() => addToTradeList(selectedPokemon)}>{t('addToShortlist')}</button>
+              <button className={buttonStyles.button} onClick={() => addToTradeList(selectedPokemon)}>{t('addToShortlist')}</button>
             )}
           </div>
         </div>

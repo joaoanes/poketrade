@@ -3,7 +3,7 @@ import { FixedSizeGrid } from 'react-window';
 import { AutoSizer } from 'react-virtualized';
 import { UsefulPokemon } from "../junkyard/pokegenieParser";
 import PokemonSquare from "./PokemonSquare"; // Ensure correct import
-import styles from "../app/page.module.css";
+
 
 type PokeListProps = {
   pokemons: UsefulPokemon[];
@@ -22,7 +22,7 @@ const VirtualPokeList: React.FC<PokeListProps> = ({ pokemons, setSelected }) => 
 
         return (
           <FixedSizeGrid
-            className={styles.pokeList}
+
             height={height}
             width={width}
             columnWidth={columnWidth}
