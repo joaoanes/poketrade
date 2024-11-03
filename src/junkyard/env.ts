@@ -1,6 +1,4 @@
-const fakeEnv : Record<string, string | undefined> = {
-  S3_BUCKET_URL: process.env.S3_BUCKET_URL,
-  }
+const fakeEnv : Record<string, string | undefined> = {S3_BUCKET_URL: process.env.S3_BUCKET_URL,}
 // next.js just does a full-text string replacement for process.env.<all variables defined on next.config>
 
 const check_env = (string: string) : string => {
@@ -10,6 +8,7 @@ const check_env = (string: string) : string => {
   return string
 } 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const boolean_env = (string: string) => {
   return check_env(string) && fakeEnv[string] === "true"
 }
