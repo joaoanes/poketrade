@@ -45,7 +45,7 @@
     "@stylistic/function-paren-newline": ["error", "multiline"],
     "@stylistic/function-call-argument-newline": ["error", "consistent"],
     "@stylistic/object-property-newline": ["error", {
-      "allowAllPropertiesOnSameLine": false
+      "allowAllPropertiesOnSameLine": true
     }],
     "@stylistic/object-curly-newline": ["error", {
       "ObjectPattern": { "multiline": true, "minProperties": 3 },

@@ -18,7 +18,7 @@ export const PokemonSquare: React.FC<PokemonSquareProps> = ({ pokemon, quick }) 
   return (
     <div className={styles.pokeSquare}>
       {
-        quick 
+        quick
           ? <PokeCircle
               alt={pokemon.pokemonName}
               shiny={shiny}
@@ -27,16 +27,14 @@ export const PokemonSquare: React.FC<PokemonSquareProps> = ({ pokemon, quick }) 
           : <DelayedLazyLoad
               shiny={shiny}
               height={100}
-              delay={1000}
+              delay={250}
               className={styles.pokeImg}
               alt={pokemon.pokemonName}
               src={`${S3_BUCKET_URL}/thumbs/${pokemon.imageId}.png`}
           />
-  
       }
-      
-      <div>
-        CP: 
+      <div className={styles.pokeCp}>
+        CP:
         {' '}
         {pokemon.cp}
       </div>

@@ -17,6 +17,8 @@ import commonStyles from "@/styles/common.module.css"
 import ribbonStyles from "../app/ribbon.module.css"
 import 'react-toastify/dist/ReactToastify.css'
 
+import { CollapsibleFooter } from "./CollapsibleFooter"
+
 const TYPED_MONS: UsefulPokemonArray[] = mons as UsefulPokemonArray[]
 
 
@@ -195,55 +197,17 @@ export const Home = () => {
           />
         </div>
       </main>
-      <div className={layoutStyles.footer}>
-        <button
-          className={commonStyles.button}
-          onClick={copyFriendCodeToClipboard}
-        >
-          {t('friendCode')}
-        </button>
-        <button
-          className={commonStyles.button}
-          onClick={() => {
-            setFilter("ALL")
-            setShowTradeList(!showTradeList)
-          }}
-        >
-          {showTradeList ? t('showAll') : `${t('showShortlist')} (${tradeList.length}) `}
-        </button>
-        <div>
-          {showTradeList ? (
-            <div
-              style={{
-                textAlign: 'center',
-                fontSize: 12
-              }}
-            >
-              <div>{t('shortlistIntro')}</div>
-              <div style={{ fontSize: 8 }}>{t('shortlistIntro2')}</div>
-            </div>
-          ) : (
-            <div
-              style={{
-                textAlign: 'center',
-                fontSize: 12
-              }}
-            >
-              <div>{t('welcome')}</div>
-              <div>{t('welcome2')}</div>
-            </div>
-          )}
-        </div>
-        <div
-          style={{
-            textAlign: "right",
-            marginRight: 20,
-            fontSize: "x-small"
-          }}
-        >
-          {t('instructions')}
-        </div>
-      </div>
+      
+      <CollapsibleFooter
+        t={t}
+        showTradeList={showTradeList}
+        tradeListLength={tradeList.length}
+        onToggleTradeList={() => {
+          setFilter("ALL")
+          setShowTradeList(!showTradeList)
+        }}
+        onCopyFriendCode={copyFriendCodeToClipboard}
+      />
 
       <div className={`${ribbonStyles.ribbon} ${ribbonStyles.ribbonTopRight}`} >
         <span onClick={toggleLanguage}>{language === 'en' ? '日本語' : 'English'}</span>

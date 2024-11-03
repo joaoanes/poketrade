@@ -4,7 +4,14 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  margin: 10px;
+  height: 120px;
+  width: 100px;
+  position: relative;
+}
+
+
+.pokeImgContainer {
+  height: 100px;
 }
 
 .pokeSquare > img {
@@ -12,3 +19,7 @@
   max-height: 100px;
   aspect-ratio: 1;
 } 
+
+.pokeCp {
+  height: 20px;
+}

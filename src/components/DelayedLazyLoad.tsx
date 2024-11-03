@@ -14,46 +14,46 @@ type DelayedLazyLoadProps = {
 
 type PossibleImageStates = 'delayed' | 'loading' | 'loaded'
 
-const DelayedLazyLoad: React.FC<DelayedLazyLoadProps>
-  = ({
-    delay = 1000, height, placeholder, alt, src, shiny
-  }) => {
-    const [shouldLoad, setShouldLoad] = useState<PossibleImageStates>('delayed')
+const DelayedLazyLoad: React.FC<DelayedLazyLoadProps> = ({
+  delay = 1000, placeholder, alt, src, shiny
+}) => {
+  const [shouldLoad, setShouldLoad] = useState<PossibleImageStates>('delayed')
 
-    useEffect(() => {
-      const timer = setTimeout(() => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      requestAnimationFrame(() => {
         setShouldLoad('loading')
-      }, delay)
+      })
+    }, delay)
 
-      return () => clearTimeout(timer)
-    }, [delay])
+    return () => clearTimeout(timer)
+  }, [delay])
 
-    const defaultPlaceholder = (
-      <div
-        style={{
-          width: '100%',
-          height: height,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+  const defaultPlaceholder = (
+    <div
+      className={spinnerStyles.spinnerContainerContainer}
+    >
+      <div className={spinnerStyles.spinnerContainer}>
         <div className={spinnerStyles.spinner} />
       </div>
-    )
+    </div>
+  )
 
-    return (
-      <div style={{ height }}>
-        {['delayed', 'loading'].includes(shouldLoad) ? (placeholder || defaultPlaceholder) : null}
-        {['loading', 'loaded'].includes(shouldLoad)
-          ? <PokeCircle
-              setShouldLoad={setShouldLoad}
-              alt={alt}
-              src={src}
-              shiny={shiny}
-          /> : null}
-      </div>
-    )
-  }
+  return (
+    <div className={spinnerStyles.delayedMainContainer}>
+      {['delayed', 'loading'].includes(shouldLoad) && (placeholder || defaultPlaceholder)}
+      {['loading', 'loaded'].includes(shouldLoad) && (
+        
+        <PokeCircle
+          setShouldLoad={setShouldLoad}
+          alt={alt}
+          src={src}
+          shiny={shiny}
+        />
+        
+      )}
+    </div>
+  )
+}
 
-export default DelayedLazyLoad
+export default React.memo(DelayedLazyLoad)

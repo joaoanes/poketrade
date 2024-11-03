@@ -1,0 +1,62 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40vh;
+  background-color: black;
+  transition: height 0.3s ease-in-out;
+  border-top: 1px solid var(--border-color);
+}
+
+.footer.collapsed {
+  height: 50px;
+}
+
+.footerContent {
+  height: calc(100% - 30px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.messageText {
+  text-align: center;
+  font-size: 12px;
+}
+
+.smallText {
+  font-size: 8px;
+}
+
+.instructions {
+  text-align: right;
+  margin-right: 20px;
+  font-size: x-small;
+}
+
+.collapseButton {
+  position: absolute;
+  top: 5px;
+  right: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.collapsedContent {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.expandButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-color);
+} 
