@@ -4,7 +4,7 @@
     "shortlistIntro": "In here you can keep track of pokemon you like and want to trade for!",
     "shortlistIntro2": "Just go to the other list, click any, and press 'add to short list!'",
     "shortlistIntro3": "This list is saved on your device!",
-    "instructions": "If you see something you like, click it so it becomes full screen and show it to me, or add it to your shortlist!",
+    "instructions": "If you see something you like, click it so it becomes full screen and add it to this list! It will save locally.",
     "friendCode": "Copy Friend Code",
     "friendCodeCopied": "Friend code copied to clipboard!",
     "all": "ALL",
@@ -19,6 +19,7 @@
     "shortlistSubtitle": "Pokemon you selected are here!",
     "leagueTitle": "League Pokemon",
     "leagueSubtitle": "High PVP IV pokemon",
-    "hideFooter": "Hide"
+    "hideFooter": "Hide",
+    "instructionsTitle": "Welcome to your tradelist!"
   }
   
