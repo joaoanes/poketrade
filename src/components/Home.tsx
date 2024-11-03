@@ -20,66 +20,84 @@ import 'react-toastify/dist/ReactToastify.css'
 const TYPED_MONS: UsefulPokemonArray[] = mons as UsefulPokemonArray[]
 
 
-export const Home = () => {
+const useTradeList = () => {
+  const [tradeList, setTradeList] = useState<UsefulPokemon[]>([])
 
   useEffect(() => {
-    const localStorageTradeList = window.localStorage.getItem("cooltrainertradeList")
-    if (localStorageTradeList !== null) {
-      setTradeList(JSON.parse(localStorageTradeList))
+    const stored = window.localStorage.getItem("cooltrainertradeList")
+    if (stored !== null) {
+      setTradeList(JSON.parse(stored))
     }
   }, [])
 
-  const {
-    t, language, setLanguage, translatePokemonName
-  } = useTranslation()
-  const [currentFilter, setFilter] = useState<string>("ALL")
-  const [selectedPokemon, setSelectedPkmn] = useState<UsefulPokemon | null>(null)
-  const [tradeList, setTradeList] = useState<UsefulPokemon[]>([])
-  const [showTradeList, setShowTradeList] = useState(false)
-
-  const handleFilterChange = useCallback((e: any) => {
-    const wantedMonNumber = e.value
-    setFilter(wantedMonNumber)
-  }, [])
-
-  const addToTradeList = useCallback((pokemon: UsefulPokemon) => {
+  const addPokemon = useCallback((pokemon: UsefulPokemon) => {
     setTradeList(prevList => {
       const newList = [...prevList, pokemon]
       window.localStorage.setItem("cooltrainertradeList", JSON.stringify(newList))
       return newList
     })
-    toast.success(`${translatePokemonName(getPokemonNumberPadded(pokemon.pokemonNumber) as any)} ${t('pokemonAddedToShortlist')}`)
-    setSelectedPkmn(null)
-  }, [t, translatePokemonName])
+  }, [])
 
-  const removeFromTradeList = useCallback((pokemon: UsefulPokemon) => {
+  const removePokemon = useCallback((pokemon: UsefulPokemon) => {
     setTradeList(prevList => {
       const newList = prevList.filter(p => p.pokemonNumber !== pokemon.pokemonNumber)
       window.localStorage.setItem("cooltrainertradeList", JSON.stringify(newList))
       return newList
     })
-    toast.error(`${translatePokemonName(getPokemonNumberPadded(pokemon.pokemonNumber) as any)} ${t('pokemonRemovedFromShortlist')}`)
-    setSelectedPkmn(null)
-  }, [t, translatePokemonName])
-
-  const allPokemons = useMemo(() => {
-    return TYPED_MONS.map((mon) => convertFromArray(mon))
   }, [])
 
+  return { 
+    tradeList, 
+    addPokemon, 
+    removePokemon 
+  }
+}
+
+const usePokemonFilter = (pokemons: UsefulPokemon[]) => {
+  const [currentFilter, setFilter] = useState<string>("ALL")
   const [shiniesOnly, setShiniesOnly] = useState(false)
 
-  const listToShow = useMemo(() => {
-    return showTradeList ? tradeList : allPokemons
-  }, [showTradeList, tradeList, allPokemons])
-
   const filteredPokemons = useMemo(() => {
-    return listToShow.filter((mon) => {
+    return pokemons.filter((mon) => {
       if (!currentFilter || currentFilter === "ALL") {
         return true
       }
       return mon.pokemonNumber.toString().padStart(3, '0') === currentFilter
     }).filter((e) => shiniesOnly ? isShiny(e) : true)
-  }, [listToShow, currentFilter, shiniesOnly])
+  }, [pokemons, currentFilter, shiniesOnly])
+
+  return {
+    currentFilter,
+    setFilter,
+    shiniesOnly,
+    setShiniesOnly,
+    filteredPokemons
+  }
+}
+
+export const Home = () => {
+  const {
+    t, language, setLanguage, translatePokemonName 
+  } = useTranslation()
+  const {
+    tradeList, addPokemon, removePokemon 
+  } = useTradeList()
+  const [selectedPokemon, setSelectedPkmn] = useState<UsefulPokemon | null>(null)
+  const [showTradeList, setShowTradeList] = useState(false)
+
+  const allPokemons = useMemo(() => TYPED_MONS.map(convertFromArray), [])
+  const listToShow = useMemo(
+    () => showTradeList ? tradeList : allPokemons, 
+    [showTradeList, tradeList, allPokemons]
+  )
+
+  const {
+    currentFilter,
+    setFilter,
+    shiniesOnly,
+    setShiniesOnly,
+    filteredPokemons
+  } = usePokemonFilter(listToShow)
 
   const setSelected = useCallback((pokemon: UsefulPokemon) => {
     setSelectedPkmn(pokemon)
@@ -97,6 +115,21 @@ export const Home = () => {
     [language, setLanguage]
   )
 
+  const handleFilterChange = useCallback((e: any) => {
+    const wantedMonNumber = e.value
+    setFilter(wantedMonNumber)
+  }, [setFilter])
+
+  const handleChangeToTradeList = useCallback((pokemon: UsefulPokemon, isAdding: boolean) => {
+    if (isAdding) {
+      addPokemon(pokemon)
+    } else {
+      removePokemon(pokemon)
+    }
+    toast.success(`${translatePokemonName(getPokemonNumberPadded(pokemon.pokemonNumber) as any)} ${isAdding ? t('pokemonAddedToShortlist') : t('pokemonRemovedFromShortlist')}`)
+    setSelectedPkmn(null)
+  }, [addPokemon, removePokemon, t, translatePokemonName])
+
 
   const uniquePokemonNumbers = useMemo(() => {
     const listToUse = showTradeList ? tradeList : TYPED_MONS.map((mon) => convertFromArray(mon))
@@ -112,8 +145,8 @@ export const Home = () => {
           translatePokemonName={translatePokemonName}
           selectedPokemon={selectedPokemon}
           setSelected={setSelected}
-          addToTradeList={addToTradeList}
-          removeFromTradeList={removeFromTradeList}
+          addToTradeList={() => handleChangeToTradeList(selectedPokemon, true)}
+          removeFromTradeList={() => handleChangeToTradeList(selectedPokemon, false)}
           isOnTradeList={tradeList.findIndex(p => p.imageId === selectedPokemon.imageId) !== -1}
         />
       )}
