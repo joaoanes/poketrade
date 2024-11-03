@@ -14,6 +14,7 @@
 
 .footerContent {
   height: calc(100% - 30px);
+  align-items: center;
   padding: 20px;
   display: flex;
   margin-top: 20px;
@@ -51,14 +52,13 @@
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   gap: 20px;
 }
 
 .collapsedButton {
-  display: flex;
   flex: 1 1;
-  flex-direction: column;
+  max-width: 60%;
 }
 
 .expandButton {

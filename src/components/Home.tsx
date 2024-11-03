@@ -89,7 +89,10 @@ export const Home = () => {
   const [activeTab, setActiveTab] = useState<TabId | undefined>()
 
   const allPokemons = useMemo(() => TYPED_MONS.map(convertFromArray), [])
-  const tabs = useMemo(() => createTabs(tradeList, allPokemons, t), [tradeList, t, allPokemons])
+  const tabs = useMemo(
+    () => createTabs(tradeList, allPokemons, t).filter(tab => !tab.hide), 
+    [tradeList, t, allPokemons]
+  )
   
   const listToShow = useMemo(() => {
     const activeTabData = tabs.find(tab => tab.id === activeTab)

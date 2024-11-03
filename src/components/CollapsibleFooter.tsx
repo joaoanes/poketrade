@@ -2,9 +2,10 @@ import { useState } from 'react'
 import styles from '@/styles/collapsibleFooter.module.css'
 import commonStyles from "@/styles/common.module.css"
 import React from 'react'
+import { LanguageTranslator } from '@/junkyard/useTranslation'
 
 interface CollapsibleFooterProps {
-  t: (key: string) => string
+  t: LanguageTranslator
   showTradeList: boolean
   tradeListLength: number
   onToggleTradeList: () => void

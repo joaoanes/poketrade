@@ -11,6 +11,7 @@ export interface Tab {
   subtitle?: string
   getPokemons: () => UsefulPokemon[]
   header?: boolean
+  hide?: true
 }
 
 export const filterPokemonByIds = (pokemonList: UsefulPokemon[], ids: string[]): UsefulPokemon[] => {
@@ -45,11 +46,13 @@ export const createTabs = (
   },
   {
     id: 'special',
+    hide: true,
     icon: './pikatail.svg',
     getPokemons: () => fullList.filter(pokemon => pokemon.pokemonName === 'Pikachu' && pokemon.shinyOutput === 1)
   },
   {
     id: 'event',
+    hide: true,
     icon: './ic_event.png',
     getPokemons: () => [] // Fill with your event pokemon list
   }

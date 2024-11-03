@@ -18,5 +18,6 @@
     "shortlistTitle": "ショートリスト",
     "shortlistSubtitle": "選択したポケモンはここにあります！",
     "leagueTitle": "リーグポケモン",
-    "leagueSubtitle": "高いPVP個体値のポケモン"
+    "leagueSubtitle": "高いPVP個体値のポケモン",
+    "hideFooter": "非表示"
 }
