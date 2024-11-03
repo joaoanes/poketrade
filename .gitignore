@@ -41,3 +41,5 @@ next-env.d.ts
 /support/images/thumbs
 /support/images/pokes
 /support/images/scans
+
+support/labeller/*.json
