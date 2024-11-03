@@ -15,8 +15,8 @@
     "removeFromShortlist": "ショートリストから削除",
     "addToShortlist": "ショートリストに追加",
     "capturedAt": "捕まえた場所",
-    "shortlistTitle": "Shortlist",
-    "shortlistSubtitle": "Shortlist subttitle",
-    "leagueTitle": "League Pokemon",
-    "leagueSubtitle": "High PVP IV pokemon"
+    "shortlistTitle": "ショートリスト",
+    "shortlistSubtitle": "選択したポケモンはここにあります！",
+    "leagueTitle": "リーグポケモン",
+    "leagueSubtitle": "高いPVP個体値のポケモン"
 }
