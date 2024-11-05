@@ -11,12 +11,15 @@ import PokeCircle from "./PokeCircle"
 export type PokemonSquareProps = {
   pokemon: UsefulPokemon
   quick: boolean
+  selected?: boolean
 }
 
-export const PokemonSquare: React.FC<PokemonSquareProps> = ({ pokemon, quick }) => {
+export const PokemonSquare: React.FC<PokemonSquareProps> = ({
+  pokemon, quick, selected 
+}) => {
   const shiny = isShiny(pokemon)
   return (
-    <div className={styles.pokeSquare}>
+    <div className={`${styles.pokeSquare} ${selected ? styles.selected : ''}`}>
       {
         quick
           ? <PokeCircle

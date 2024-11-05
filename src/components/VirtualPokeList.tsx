@@ -1,9 +1,9 @@
-import React, { useCallback, FC } from 'react'
+import React, { useCallback, FC, useContext } from 'react'
 import { FixedSizeGrid } from 'react-window'
-import { AutoSizer } from 'react-virtualized'
+import {AutoSizer} from 'react-virtualized'
 import { UsefulPokemon } from "../junkyard/pokegenieParser"
-import PokemonSquare from "./PokemonSquare" // Ensure correct import
-
+import { SelectionContext } from './SelectionWrapper'
+import PokeCell from './PokeCell'
 
 type PokeListProps = {
   pokemons: UsefulPokemon[];
@@ -11,12 +11,18 @@ type PokeListProps = {
 }
 
 const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
-  // Memoize grid calculations to prevent recalculations on every render
+  const { selectedIds, toggleSelection } = useContext(SelectionContext)
+  const isSelectedMap = React.useMemo(() => {
+    const map = new Map<string, boolean>()
+    selectedIds.forEach(id => map.set(id, true))
+    return map
+  }, [selectedIds])
+
   const getGridParams = useCallback(
     ({ width, height }: { width: number, height: number }) => {
       const columnWidth = 100
       const rowHeight = 120
-      const columnCount = Math.floor(width / columnWidth)
+      const columnCount = Math.floor(width / columnWidth) || 1 // Avoid division by zero
       const rowCount = Math.ceil(pokemons.length / columnCount)
       return { 
         columnWidth,
@@ -34,43 +40,10 @@ const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
   const getItemData = useCallback((columnCount: number) => ({
     pokemons,
     columnCount,
-    setSelected
-  }), [pokemons, setSelected])
-
-  // Memoize cell renderer to prevent recreation on every render
-  const Cell = useCallback(({
-    rowIndex, columnIndex, style, data 
-  }: any) => {
-    const { 
-      pokemons, columnCount, setSelected 
-    } = data
-    const index = rowIndex * columnCount + columnIndex
-    const pokemon = pokemons[index]
-
-    if (!pokemon) return <div style={style} />
-
-    return (
-      <div 
-        style={{
-          ...style,
-          // Force GPU acceleration and prevent layout recalculation
-          transform: `translate3d(${style.left}px, ${style.top}px, 0)`,
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: style.width,
-          height: style.height,
-          willChange: 'transform'
-        }} 
-        onClick={() => setSelected(pokemon)}
-      >
-        <PokemonSquare
-          pokemon={pokemon}
-          quick={pokemons.length < 20}
-        />
-      </div>
-    )
-  }, [])
+    setSelected,
+    isSelectedMap,
+    toggleSelection,
+  }), [pokemons, setSelected, isSelectedMap, toggleSelection])
 
   return (
     <AutoSizer>
@@ -101,7 +74,7 @@ const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
                 `${data.pokemons[rowIndex * columnCount + columnIndex]?.imageId}`
             } // Better key format
           >
-            {Cell}
+            {PokeCell}
           </FixedSizeGrid>
         )
       }}

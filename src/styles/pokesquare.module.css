@@ -9,6 +9,18 @@
   position: relative;
 }
 
+.pokeSquare.selected::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #00ff00;
+  mix-blend-mode: multiply;
+  opacity: 0.25;
+  pointer-events: none;
+}
 
 .pokeImgContainer {
   height: 100px;
