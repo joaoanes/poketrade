@@ -1,0 +1,12 @@
+.formTitle {
+    padding: 8px;
+    font-weight: bold;
+    display: flex;
+    align-items: flex-end;
+    font-size: 24px;
+  }
+  
+  .container {
+    height: 100%;
+    width: 100%;
+  }

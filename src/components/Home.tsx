@@ -19,6 +19,10 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { CollapsibleFooter } from "./CollapsibleFooter"
 import { createTabs, TabId } from "@/data/tabs"
+import { PikachuFormKeys, usePikachuForms } from "../hooks/usePikachuForms"
+import GroupedPikachuList from './GroupedPokemonList'
+import { defaultPlaceholder } from "./DelayedLazyLoad"
+import { useUrlState } from '@/providers/UrlStateProvider'
 
 const TYPED_MONS: UsefulPokemonArray[] = mons as UsefulPokemonArray[]
 
@@ -56,39 +60,45 @@ const useTradeList = () => {
 }
 
 const usePokemonFilter = (pokemons: UsefulPokemon[]) => {
-  const [currentFilter, setFilter] = useState<string>("ALL")
-  const [shiniesOnly, setShiniesOnly] = useState(false)
+  const { urlState, updateUrlState } = useUrlState()
 
   const filteredPokemons = useMemo(() => {
     return pokemons.filter((mon) => {
-      if (!currentFilter || currentFilter === "ALL") {
+      if (!urlState.filter || urlState.filter === "ALL") {
         return true
       }
-      return mon.pokemonNumber.toString().padStart(3, '0') === currentFilter
-    }).filter((e) => shiniesOnly ? isShiny(e) : true)
-  }, [pokemons, currentFilter, shiniesOnly])
+      return mon.pokemonNumber.toString().padStart(3, '0') === urlState.filter
+    }).filter((e) => urlState.shiny ? isShiny(e) : true)
+  }, [pokemons, urlState.filter, urlState.shiny])
 
   return {
-    currentFilter,
-    setFilter,
-    shiniesOnly,
-    setShiniesOnly,
+    currentFilter: urlState.filter,
+    setFilter: (filter: string) => updateUrlState({ filter }),
+    shiniesOnly: urlState.shiny,
+    setShiniesOnly: (value: boolean) => updateUrlState({ shiny: value }),
     filteredPokemons
   }
 }
 
 export const Home = () => {
+  const { urlState, updateUrlState } = useUrlState()
+  const allPokemons = useMemo(() => TYPED_MONS.map(convertFromArray), [])
+  
   const {
     t, language, setLanguage, translatePokemonName 
   } = useTranslation()
   const {
     tradeList, addPokemon, removePokemon 
   } = useTradeList()
-  const [selectedPokemon, setSelectedPkmn] = useState<UsefulPokemon | null>(null)
+  const [selectedPokemon, setSelectedPkmn] = useState<UsefulPokemon | null>(() => {
+    if (urlState.pokemon) {
+      return allPokemons.find(p => p.imageId === urlState.pokemon) ?? null
+    }
+    return null
+  })
   const [showTradeList, setShowTradeList] = useState(false)
-  const [activeTab, setActiveTab] = useState<TabId | undefined>()
+  const [activeTab, setActiveTab] = useState<TabId | undefined>(() => urlState.tab)
 
-  const allPokemons = useMemo(() => TYPED_MONS.map(convertFromArray), [])
   const tabs = useMemo(
     () => createTabs(tradeList, allPokemons, t).filter(tab => !tab.hide), 
     [tradeList, t, allPokemons]
@@ -107,9 +117,23 @@ export const Home = () => {
     filteredPokemons
   } = usePokemonFilter(listToShow)
 
-  const setSelected = useCallback((pokemon: UsefulPokemon) => {
+  const {
+    loadPikachuForms, getPikachuForm, isLoaded 
+  } = usePikachuForms()
+
+  useEffect(() => {
+    if (activeTab === "pikachu") {
+      loadPikachuForms()
+    }
+  }, [activeTab, loadPikachuForms])
+
+  const setSelected = useCallback((pokemon: UsefulPokemon | null) => {
+    if (pokemon?.pokemonNumber === 25) {
+      loadPikachuForms()
+    }
     setSelectedPkmn(pokemon)
-  }, [])
+    updateUrlState({ pokemon: pokemon?.imageId ?? null })
+  }, [loadPikachuForms, updateUrlState])
 
   const copyFriendCodeToClipboard = useCallback(async () => {
     const friendCode = "276625381166"
@@ -145,9 +169,16 @@ export const Home = () => {
   }, [tradeList, showTradeList])
 
   const handleTabClick = useCallback((tab: TabId) => {
-    setActiveTab(prev => prev === tab ? undefined : tab)
-  }, [])
-
+    const newTab = activeTab === tab ? undefined : tab
+    setActiveTab(newTab)
+    updateUrlState({ tab: newTab })
+  }, [activeTab, updateUrlState])
+  
+  const toggleShinies = useCallback((value: boolean) => {
+    setShiniesOnly(value)
+    updateUrlState({ shiny: value })
+  }, [setShiniesOnly, updateUrlState])
+  
   return (
     <div className={layoutStyles.mainContainer}>
       <div className={layoutStyles.tabContainer}>
@@ -171,7 +202,6 @@ export const Home = () => {
       />
       {selectedPokemon && (
         <SelectedPokemonModal
-          t={t}
           translatePokemonName={translatePokemonName}
           selectedPokemon={selectedPokemon}
           setSelected={setSelected}
@@ -183,14 +213,14 @@ export const Home = () => {
       <main className={layoutStyles.main}>
         <div className={layoutStyles.header}>
           <div
-            onClick={() => setShiniesOnly(!shiniesOnly)}
+            onClick={() => toggleShinies(!shiniesOnly)}
             className={commonStyles.shinyButton}
           >
             <ShinyCircle position={"relative"} />
           </div>
           <input
             checked={shiniesOnly}
-            onClick={() => setShiniesOnly(!shiniesOnly)}
+            onClick={() => toggleShinies(!shiniesOnly)}
             type='checkbox'
           >
           </input>
@@ -230,15 +260,45 @@ export const Home = () => {
             <>
               {activeTab && tabs.find(tab => tab.id === activeTab)?.title && (
                 <div className={layoutStyles.tabTitleContainer}>
-                  <div className={layoutStyles.tabTitle}>{tabs.find(tab => tab.id === activeTab)?.title}</div>
-                  <div className={layoutStyles.tabSubtitle}>{tabs.find(tab => tab.id === activeTab)?.subtitle}</div>
+                  <div className={layoutStyles.tabTitle}>
+                    {tabs.find(tab => tab.id === activeTab)?.title}
+                  </div>
+                  <div className={layoutStyles.tabSubtitle}>
+                    {tabs.find(tab => tab.id === activeTab)?.subtitle}
+                  </div>
                 </div>
               )}
-              <VirtualPokeList
-                setSelected={setSelected}
-                pokemons={filteredPokemons}
-                key={activeTab}
-              />
+              {activeTab === "pikachu" ? (
+                isLoaded ? (
+                  <GroupedPikachuList
+                    pokemons={filteredPokemons}
+                    setSelected={setSelected}
+                    getPikachuForm={getPikachuForm}
+                    getGroupKey={(pokemon) => getPikachuForm(pokemon.imageId) || ''}
+                    getGroupTitle={(form) => t(`pikachuForms.${(form as PikachuFormKeys)}`)}
+                  />
+                ) : (
+                  <div className={layoutStyles.loading}>
+                    <div className={layoutStyles.loadingPlaceholder}>{defaultPlaceholder}</div>
+                    <div className={layoutStyles.loadingText}>{t("loading")}</div>
+                  </div>
+                )
+              ) : activeTab === "pokedex" ? (
+                <GroupedPikachuList
+                  key={activeTab}
+                  pokemons={filteredPokemons}
+                  setSelected={setSelected}
+                  getPikachuForm={getPikachuForm}
+                  getGroupKey={(pokemon) => getPokemonNumberPadded(pokemon.pokemonNumber)}
+                  getGroupTitle={(number) => `#${number} - ${translatePokemonName(number as any)}`}
+                />
+              ) : (
+                <VirtualPokeList
+                  setSelected={setSelected}
+                  pokemons={filteredPokemons}
+                  key={activeTab}
+                />
+              )}
             </>
           )}
         </div>

@@ -14,6 +14,16 @@ type DelayedLazyLoadProps = {
 
 type PossibleImageStates = 'delayed' | 'loading' | 'loaded'
 
+export const defaultPlaceholder = (
+  <div
+    className={spinnerStyles.spinnerContainerContainer}
+  >
+    <div className={spinnerStyles.spinnerContainer}>
+      <div className={spinnerStyles.spinner} />
+    </div>
+  </div>
+)
+
 const DelayedLazyLoad: React.FC<DelayedLazyLoadProps> = ({
   delay = 1000, placeholder, alt, src, shiny
 }) => {
@@ -29,15 +39,6 @@ const DelayedLazyLoad: React.FC<DelayedLazyLoadProps> = ({
     return () => clearTimeout(timer)
   }, [delay])
 
-  const defaultPlaceholder = (
-    <div
-      className={spinnerStyles.spinnerContainerContainer}
-    >
-      <div className={spinnerStyles.spinnerContainer}>
-        <div className={spinnerStyles.spinner} />
-      </div>
-    </div>
-  )
 
   return (
     <div className={spinnerStyles.delayedMainContainer}>

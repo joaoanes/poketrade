@@ -17,6 +17,9 @@
   background-color: #fff;
   border-radius: 10px;
   max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .infoBox {
@@ -50,11 +53,18 @@
   font-size: 30px;
 }
 
-.modalCp {}
+.modalButton {
+  margin-top: auto;
+}
 
-.modalNumber {}
-
-.modalCaptured {}
+.shareButton {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 20px;
+  justify-content: center;
+  
+  height: 15px;
+}
 
 @media (width <= 600px) {
   .infoBox {
@@ -66,5 +76,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .shareButton {
+    margin-top: 10px;
   }
 } 

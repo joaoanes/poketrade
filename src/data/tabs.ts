@@ -1,7 +1,7 @@
-import { LanguageTranslator } from "@/junkyard/useTranslation"
+import { LanguageTranslator } from "@/providers/LanguageProvider"
 import { UsefulPokemon } from "../junkyard/pokegenieParser"
 
-export type TabId = 'shortlist' | 'league' | 'special' | 'event'
+export type TabId = 'shortlist' | 'league' | 'special' | 'event' | 'pikachu' | 'pokedex'
 
 export interface Tab {
   id: TabId
@@ -33,6 +33,30 @@ export const createTabs = (
     header: true
   },
   {
+    id: 'special',
+    hide: true,
+    icon: './pikatail.svg',
+    getPokemons: () => fullList.filter(pokemon => pokemon.pokemonName === 'Pikachu' && pokemon.shinyOutput === 1)
+  },
+  {
+    id: 'event',
+    icon: './ic_event.png',
+    getPokemons: () => [], // Fill with your event pokemon list
+    hide: true
+  },
+  {
+    id: 'pikachu',
+    icon: './pikatail.svg',
+    getPokemons: () => fullList.filter(p => p.pokemonNumber === 25),
+  },
+  {
+    id: 'pokedex',
+    
+    title: t('pokedexTitle'),
+    icon: './ic_pokedex.png',
+    getPokemons: () => fullList,
+  },
+  {
     id: 'league',
     icon: './league.svg',
     title: t('leagueTitle'),
@@ -43,17 +67,5 @@ export const createTabs = (
         .concat(fullList.filter(pokemon => pokemon.cp >= 1450 && pokemon.cp <= 1500))
         .sort((a, b) => b.cp - a.cp)
     )
-  },
-  {
-    id: 'special',
-    hide: true,
-    icon: './pikatail.svg',
-    getPokemons: () => fullList.filter(pokemon => pokemon.pokemonName === 'Pikachu' && pokemon.shinyOutput === 1)
-  },
-  {
-    id: 'event',
-    hide: true,
-    icon: './ic_event.png',
-    getPokemons: () => [] // Fill with your event pokemon list
   }
 ] 

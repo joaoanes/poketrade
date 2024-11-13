@@ -5,7 +5,9 @@ import buttonStyles from "@/styles/common.module.css"
 import { S3_BUCKET_URL } from "@/junkyard/env"
 import { getPokemonNumberPadded } from "@/junkyard/misc"
 import { UsefulPokemon } from "@/junkyard/pokegenieParser"
-import { TranslationKeys } from "@/junkyard/useTranslation"
+import { toast } from "react-toastify"
+import { usePikachuForms } from "../hooks/usePikachuForms"
+import { useTranslation } from "@/junkyard/useTranslation"
 
 
 export type SelectedPokemonModalProps = {
@@ -15,7 +17,6 @@ export type SelectedPokemonModalProps = {
   addToTradeList: (pokemon: UsefulPokemon) => void;
   removeFromTradeList: (pokemon: UsefulPokemon) => void;
   isOnTradeList: boolean;
-  t: (arg: TranslationKeys) => string;
 }
 
 export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
@@ -24,9 +25,25 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
   addToTradeList, 
   removeFromTradeList,
   isOnTradeList, 
-  translatePokemonName, 
-  t 
+  translatePokemonName
 }) => {
+  const { getPikachuForm, loadPikachuForms } = usePikachuForms()
+  const { t } = useTranslation()
+  React.useEffect(() => {
+    if (selectedPokemon.pokemonNumber === 25) {
+      loadPikachuForms()
+    }
+  }, [selectedPokemon, loadPikachuForms])
+
+  const pikachuForm = selectedPokemon.pokemonNumber === 25 
+    ? getPikachuForm(selectedPokemon.imageId) 
+    : undefined
+
+  const handleShare = async () => {
+    await navigator.clipboard.writeText(window.location.href)
+    toast.success(t('urlCopied'))
+  }
+
   return (
     <div
       onClick={() => setSelected(null)}
@@ -56,6 +73,11 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
                 {selectedPokemon.pokemonNumber}
               </span>
             </div>
+            {pikachuForm && (
+              <div className={styles.modalForm}>
+                {t(`pikachuForms.${pikachuForm}`)}
+              </div>
+            )}
             <div className={styles.modalCp}>
               CP:
               {selectedPokemon.cp}
@@ -76,7 +98,7 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
             </div>
             {isOnTradeList ? (
               <button
-                className={buttonStyles.button}
+                className={`${buttonStyles.button} ${styles.modalButton}`}
                 onClick={() => removeFromTradeList(selectedPokemon)}
               >
                 {t('removeFromShortlist')}
@@ -88,7 +110,7 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
               </button>
             ) : (
               <button
-                className={buttonStyles.button}
+                className={`${buttonStyles.button} ${styles.modalButton}`}
                 onClick={() => addToTradeList(selectedPokemon)}
               >
                 {t('addToShortlist')}
@@ -101,7 +123,13 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
             )}
           </div>
         </div>
-
+        
+        <button
+          className={`${buttonStyles.button} ${styles.shareButton}`}
+          onClick={handleShare}
+        >
+          {t('share')}
+        </button>
       </div>
     </div>
   )

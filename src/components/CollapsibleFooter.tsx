@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styles from '@/styles/collapsibleFooter.module.css'
 import commonStyles from "@/styles/common.module.css"
 import React from 'react'
-import { LanguageTranslator } from '@/junkyard/useTranslation'
+import { LanguageTranslator } from '@/providers/LanguageProvider'
 
 interface CollapsibleFooterProps {
   t: LanguageTranslator
