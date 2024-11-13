@@ -30,20 +30,38 @@ export function UrlStateProvider({ children }: { children: ReactNode }) {
   const updateUrlState = useCallback((newState: Partial<UrlState>) => {
     const newParams = new URLSearchParams(searchParams.toString())
     
-    if (newState.tab) newParams.set('tab', newState.tab)
-    else if (newState.tab === undefined) newParams.delete('tab')
+    const currentState = {
+      tab: searchParams.get('tab') as TabId | undefined,
+      pokemon: searchParams.get('pokemon'),
+      shiny: searchParams.get('shiny') === 'true',
+      filter: searchParams.get('filter') || 'ALL'
+    }
     
-    if (newState.pokemon) newParams.set('pokemon', newState.pokemon)
-    else if (newState.pokemon === null) newParams.delete('pokemon')
+    const mergedState = {
+      ...currentState,
+      ...newState
+    }
     
-    if (newState.shiny) {
+    if (mergedState.tab) {
+      newParams.set('tab', mergedState.tab)
+    } else {
+      newParams.delete('tab')
+    }
+    
+    if (mergedState.pokemon) {
+      newParams.set('pokemon', mergedState.pokemon)
+    } else {
+      newParams.delete('pokemon')
+    }
+    
+    if (mergedState.shiny) {
       newParams.set('shiny', 'true')
-    } else if (newState.shiny === false) {
+    } else {
       newParams.delete('shiny')
     }
     
-    if (newState.filter && newState.filter !== 'ALL') {
-      newParams.set('filter', newState.filter)
+    if (mergedState.filter && mergedState.filter !== 'ALL') {
+      newParams.set('filter', mergedState.filter)
     } else {
       newParams.delete('filter')
     }
