@@ -3,7 +3,9 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: black;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
   transition: height 0.3s ease-in-out;
   border-top: 1px solid var(--border-color);
 }
@@ -17,18 +19,21 @@
   align-items: center;
   padding: 20px;
   display: flex;
-  margin-top: 20px;
   flex-direction: column;
   gap: 15px;
 }
 
 .messageText {
   text-align: center;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 .smallText {
   font-size: 8px;
+}
+
+.lastUpdated {
+  font-size: 12px;
 }
 
 .instructions {
@@ -65,6 +70,20 @@
   background: none;
   border: none;
   cursor: pointer;
+  color: black;
   padding: 20px;
   font-size: 25px;
 } 
+
+.extraInfo {
+  font-size: 12px; /* Adjust font size as needed */
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+@media (width <= 600px) { /* Adjust the max-width as needed for your mobile breakpoint */
+  .footerContent {
+    margin-top: 20px; /* Adjusted margin for mobile */
+  }
+}

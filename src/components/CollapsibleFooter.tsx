@@ -4,6 +4,10 @@ import commonStyles from "@/styles/common.module.css"
 import React from 'react'
 import { LanguageTranslator } from '@/providers/LanguageProvider'
 
+const LAST_UPDATED = "23/11/2024"
+const PIKACHU_CLASSIFIER = "pika-2"
+const SHINY_CLASSIFIER = "simplex-hsv-g-sam"
+
 interface CollapsibleFooterProps {
   t: LanguageTranslator
   showTradeList: boolean
@@ -18,13 +22,17 @@ export const CollapsibleFooter = ({
   onCopyFriendCode
 }: CollapsibleFooterProps) => {
   const [isExpanded, setIsExpanded] = useState(true)
+  const [showExtraInfo, setShowExtraInfo] = useState(false)
+
+  const toggleExtraInfo = () => {
+    setShowExtraInfo(prev => !prev)
+  }
 
   return (
     <div className={`${styles.footer} ${!isExpanded ? styles.collapsed : ''}`}>
       {isExpanded ? (
         <>
           <div className={styles.footerContent}>
-
             <div>
               {showTradeList ? (
                 <div className={styles.messageText}>
@@ -38,6 +46,22 @@ export const CollapsibleFooter = ({
                 </div>
               )}
             </div>
+
+            <div
+              className={styles.lastUpdated}
+              onClick={toggleExtraInfo}
+            >
+              {t('lastUpdatedDate') + " " + LAST_UPDATED }
+            </div>
+            {showExtraInfo && (
+              <div 
+                className={styles.extraInfo}
+                onClick={toggleExtraInfo}
+              >
+                <div>{t('shinyImageClassifier')}: {SHINY_CLASSIFIER}</div>
+                <div>{t('pikachuFormsClassifier')}: {PIKACHU_CLASSIFIER}</div>
+              </div>
+            )}
 
             <button
               className={commonStyles.button}
@@ -53,7 +77,6 @@ export const CollapsibleFooter = ({
           >
             ▼ {t('hideFooter')}
           </button>
-
         </>
       ) : (
         <div className={styles.collapsedContent}>

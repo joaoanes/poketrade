@@ -34,54 +34,56 @@ const App = () => {
         .catch(error => console.error('Error loading JSON data:', error));
     }, []);
 
-    // Group data by species
-    const groupedData = modifiedData.reduce((acc, item) => {
-        const { PokemonNumber, PokemonName } = item;
-        if (!acc[PokemonNumber]) acc[PokemonNumber] = [];
-        acc[PokemonNumber].push(item);
-        return acc;
-    }, {});
-
     const handleExport = () => {
         const outputContainer = document.getElementById('output');
         outputContainer.textContent = JSON.stringify(modifiedData, null, 2);
     };
 
+    // Group data by species for display, excluding those with ShinyOutput of 0 or 1
+    const filteredGroupedData = modifiedData.reduce((acc, item) => {
+        if (item.ShinyOutput !== 0 && item.ShinyOutput !== 1) { // Filter condition for display
+            const { PokemonNumber, PokemonName } = item;
+            if (!acc[PokemonNumber]) acc[PokemonNumber] = [];
+            acc[PokemonNumber].push(item);
+        }
+        return acc;
+    }, {});
+
     return React.createElement(
         'div',
         { className: 'App' },
         React.createElement(
-        'button',
-        { className: 'sticky-button', onClick: handleExport },
-        'Export Data'
+            'button',
+            { className: 'sticky-button', onClick: handleExport },
+            'Export Data'
         ),
-        Object.keys(groupedData).map(pokemonNumber => 
-        React.createElement(SpeciesSection, {
-            key: pokemonNumber,
-            speciesData: groupedData[pokemonNumber],
-            pokemonName: groupedData[pokemonNumber][0].PokemonName
-        })
+        Object.keys(filteredGroupedData).map(pokemonNumber => 
+            React.createElement(SpeciesSection, {
+                key: pokemonNumber,
+                speciesData: filteredGroupedData[pokemonNumber],
+                pokemonName: filteredGroupedData[pokemonNumber][0].PokemonName
+            })
         ),
         React.createElement('div', { id: 'output', className: 'output-container' })
     );
-    };
+};
 
-    const SpeciesSection = ({ speciesData, pokemonName }) => {
+const SpeciesSection = ({ speciesData, pokemonName }) => {
     return React.createElement(
         'div',
         { className: 'species-section' },
         React.createElement('h2', null, `${pokemonName} (Species ID: ${speciesData[0].PokemonNumber})`),
         React.createElement(
-        'div',
-        { className: 'images-container' },
-        speciesData.map((pokemon, index) => 
-            React.createElement(PokemonImage, { key: index, pokemon })
-        )
+            'div',
+            { className: 'images-container' },
+            speciesData.map((pokemon, index) => 
+                React.createElement(PokemonImage, { key: index, pokemon })
+            )
         )
     );
-    };
+};
 
-    const PokemonImage = ({ pokemon }) => {
+const PokemonImage = ({ pokemon }) => {
     const [isShiny, setIsShiny] = React.useState(pokemon.isShiny);
     const [excludeImage, setExcludeImage] = React.useState(pokemon.excludeImage);
     const [isVisible, setIsVisible] = React.useState(false);
@@ -121,32 +123,32 @@ const App = () => {
         React.createElement('div', null, `${pokemon.ImageId}`),
         React.createElement('div', null, `${pokemon.ShinyOutput}`),
         React.createElement(
-        'label',
-        null,
-        React.createElement('input', {
-            type: 'checkbox',
-            checked: isShiny,
-            onChange: () => setIsShiny(!isShiny)
-        }),
-        ' Mark as Shiny'
+            'label',
+            null,
+            React.createElement('input', {
+                type: 'checkbox',
+                checked: isShiny,
+                onChange: () => setIsShiny(!isShiny)
+            }),
+            ' Mark as Shiny'
         ),
         React.createElement(
-        'label',
-        null,
-        React.createElement('input', {
-            type: 'checkbox',
-            checked: excludeImage,
-            onChange: () => setExcludeImage(!excludeImage)
-        }),
-        ' Exclude this Image'
+            'label',
+            null,
+            React.createElement('input', {
+                type: 'checkbox',
+                checked: excludeImage,
+                onChange: () => setExcludeImage(!excludeImage)
+            }),
+            ' Exclude this Image'
         )
     );
-    };
+};
 
-    // Render the app
-    ReactDOM.render(
+// Render the app
+ReactDOM.render(
     React.createElement(App),
     document.getElementById('root')
-    );
+);
 
 // lmao tfw no jsx

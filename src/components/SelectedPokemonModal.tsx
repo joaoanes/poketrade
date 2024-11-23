@@ -66,12 +66,11 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
           </div>
           <div className={styles.right}>
             <div className={styles.modalName}>
-              {translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)}
-              {' '}
-              <span className={styles.modalNumber}>
-                #
-                {selectedPokemon.pokemonNumber}
-              </span>
+              <div className={selectedPokemon.shinyOutput === 1 ? styles.shiny : ""}>{translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)}
+              </div>
+              <div className={styles.modalNumber}>
+                #{selectedPokemon.pokemonNumber}
+              </div>
             </div>
             {pikachuForm && (
               <div className={styles.modalForm}>
@@ -94,7 +93,7 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
               {t("capturedAt")}
               :
               {' '}
-              {selectedPokemon.captureDate}
+              {new Date(selectedPokemon.captureDate).toLocaleDateString()}
             </div>
             {isOnTradeList ? (
               <button

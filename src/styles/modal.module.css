@@ -51,6 +51,9 @@
 
 .modalName {
   font-size: 30px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
 
 .modalButton {
@@ -64,6 +67,14 @@
   justify-content: center;
   
   height: 15px;
+}
+
+.shiny {
+  color: #d5c440;
+}
+
+.modalNumber {
+  font-size: 20px
 }
 
 @media (width <= 600px) {
