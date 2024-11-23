@@ -42,4 +42,6 @@ next-env.d.ts
 /support/images/pokes
 /support/images/scans
 
-support/labeller/*.json
+/support/*/*.json
+
+/src/junkyard/*.json
