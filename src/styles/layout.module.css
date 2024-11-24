@@ -154,6 +154,10 @@
 }
 .tabTitleContainer {
   margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-display: center;
 }
 
 .loading {
@@ -171,4 +175,17 @@
 .loadingPlaceholder {
   overflow: visible;
   padding: 10px;
+}
+
+.containerWrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/* I need better names */
+.containerContainer {
+  flex-grow: 1;
 }

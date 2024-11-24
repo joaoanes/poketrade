@@ -149,7 +149,9 @@ export const createTabs = (
       '1ldifkerukr1lk',
       '8kqw9ct95yleut' //bulbas
     ].includes(p.imageId))
-      .concat(fullList.filter(p => p.pokemonName === 'Klefki').slice(0, 5)),
+      .concat(['Klefki', 'Gogoat', 'Skiddo'].map(species => 
+        fullList.filter(p => p.pokemonName === species)
+          .slice(0, Math.min(fullList.filter(p => p.pokemonName === species).length, 5))).flat())
   },
   {
     id: 'league',

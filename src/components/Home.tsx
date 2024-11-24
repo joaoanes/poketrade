@@ -257,7 +257,7 @@ export const Home = () => {
               </div>
             </div>
           ) : (
-            <>
+            <div className={layoutStyles.containerWrapper}>
               {activeTab && tabs.find(tab => tab.id === activeTab)?.title && (
                 <div className={layoutStyles.tabTitleContainer}>
                   <div className={layoutStyles.tabTitle}>
@@ -268,38 +268,40 @@ export const Home = () => {
                   </div>
                 </div>
               )}
-              {activeTab === "pikachu" ? (
-                isLoaded ? (
+              <div className={layoutStyles.containerContainer}>
+                {activeTab === "pikachu" ? (
+                  isLoaded ? (
+                    <GroupedPikachuList
+                      pokemons={filteredPokemons}
+                      setSelected={setSelected}
+                      getPikachuForm={getPikachuForm}
+                      getGroupKey={(pokemon) => getPikachuForm(pokemon.imageId) || ''}
+                      getGroupTitle={(form) => t(`pikachuForms.${(form as PikachuFormKeys)}`)}
+                    />
+                  ) : (
+                    <div className={layoutStyles.loading}>
+                      <div className={layoutStyles.loadingPlaceholder}>{defaultPlaceholder}</div>
+                      <div className={layoutStyles.loadingText}>{t("loading")}</div>
+                    </div>
+                  )
+                ) : activeTab === "pokedex" ? (
                   <GroupedPikachuList
+                    key={activeTab}
                     pokemons={filteredPokemons}
                     setSelected={setSelected}
                     getPikachuForm={getPikachuForm}
-                    getGroupKey={(pokemon) => getPikachuForm(pokemon.imageId) || ''}
-                    getGroupTitle={(form) => t(`pikachuForms.${(form as PikachuFormKeys)}`)}
+                    getGroupKey={(pokemon) => getPokemonNumberPadded(pokemon.pokemonNumber)}
+                    getGroupTitle={(number) => `#${number} - ${translatePokemonName(number as any)}`}
                   />
                 ) : (
-                  <div className={layoutStyles.loading}>
-                    <div className={layoutStyles.loadingPlaceholder}>{defaultPlaceholder}</div>
-                    <div className={layoutStyles.loadingText}>{t("loading")}</div>
-                  </div>
-                )
-              ) : activeTab === "pokedex" ? (
-                <GroupedPikachuList
-                  key={activeTab}
-                  pokemons={filteredPokemons}
-                  setSelected={setSelected}
-                  getPikachuForm={getPikachuForm}
-                  getGroupKey={(pokemon) => getPokemonNumberPadded(pokemon.pokemonNumber)}
-                  getGroupTitle={(number) => `#${number} - ${translatePokemonName(number as any)}`}
-                />
-              ) : (
-                <VirtualPokeList
-                  setSelected={setSelected}
-                  pokemons={filteredPokemons}
-                  key={activeTab}
-                />
-              )}
-            </>
+                  <VirtualPokeList
+                    setSelected={setSelected}
+                    pokemons={filteredPokemons}
+                    key={activeTab}
+                  />
+                )}
+              </div>
+            </div>
           )}
         </div>
       </main>
