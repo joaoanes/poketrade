@@ -114,7 +114,31 @@ export const createTabs = (
       'xftrd2c3d3lmus',
       'la2bbfqmp35lmk',
       'jcp2242zokql7q',
-      '5cvcrawmwu38l8'
+      '5cvcrawmwu38l8',
+      'fyd1098aokucbo',//mewtwo
+      '51whfql7765b2z',
+      'fx2ez8k6rpaiy6',
+      'e30jj5l0tfnb41',
+      'fsr1c46hu6vcv1',
+      '3uwo13v38jdh3j', //farfetchds japan
+      '1vsv6k88ik3jhi', 
+      'smpvd29kmwrsd5', 
+      'y6hvu0tgmhijns', //heracrosses,
+      'z8tv7dhi4vlvsf',
+      'o6dhwym59tr8p4', //taurus,
+      '9a5u8ee8h2lktm',
+      'fkzwbt6o53qxq8',
+      '3toa1f96ayieow', //tropius
+      '8ww5vjare0qm5y',
+      'zl8ni2ihz3zd9w',
+      '840mvm9ouj03k5', //carnivines
+      '9i0s8spd9e1xx6',
+      'xe7opt3eaelq89',
+      'cg93gdkspdrxnu',
+      'slc6056tow028y',
+      'eby8in4t5vu8zg', //furfrouus
+      'ae2eypt54ckr5w',
+      'tayohm9dh6zryr'// corsola
     ].includes(p.imageId)),
   },
   {
