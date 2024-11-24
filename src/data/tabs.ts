@@ -138,8 +138,18 @@ export const createTabs = (
       'slc6056tow028y',
       'eby8in4t5vu8zg', //furfrouus
       'ae2eypt54ckr5w',
-      'tayohm9dh6zryr'// corsola
-    ].includes(p.imageId)),
+      'tayohm9dh6zryr',// corsola,
+      '8kqw9ct95yleut', //bulbapika
+      '3g3oirsqo42flk', //eurobeat dialga
+      'ws0py0by40vpyf', //axew
+      'sbycrx7xto5kvt', //snorlax baby,
+      '9nl8g6dc1gi7bf', //chimchar
+      'qiwj1a6k2onqjb', // hat tortwig
+      'qfzwvglezh2b4c',
+      '1ldifkerukr1lk',
+      '8kqw9ct95yleut' //bulbas
+    ].includes(p.imageId))
+      .concat(fullList.filter(p => p.pokemonName === 'Klefki').slice(0, 5)),
   },
   {
     id: 'league',
