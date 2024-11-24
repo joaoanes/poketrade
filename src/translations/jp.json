@@ -26,6 +26,8 @@
     "instructionsTitle": "トレードリストへようこそ！",
     "pokedexTitle": "ポケモン図鑑",
     "lastUpdatedDate": "最終更新日:",
+    "tradeTitle": "スペシャルトレード",
+    "tradeSubtitle": "特に交換に適したポケモンを選んでいます",
     "shinyImageClassifier": "色違い画像分類器",
     "pikachuFormsClassifier": "ピカチュウのフォーム分類器",
     "pikachuForms.ADVENTURE_HAT_2020": "冒険家ピカチュウ",

@@ -26,6 +26,8 @@
     "instructionsTitle": "Welcome to your tradelist!",
     "pokedexTitle": "Pokedex",
     "lastUpdatedDate": "Last updated date:",
+    "tradeTitle": "Special Trades",
+    "tradeSubtitle": "Pokemon I've picked that are exceptionally tradeable",
     "shinyImageClassifier": "Shiny image classifier",
     "pikachuFormsClassifier": "Pikachu forms classifier",
     "pikachuForms.ADVENTURE_HAT_2020": "Explorer Pikachu",

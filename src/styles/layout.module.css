@@ -108,11 +108,11 @@
   height: 20px;
 }
 
-.event > img, .shortlist > img, .pokedex > img {
+.event > img, .shortlist > img, .pokedex > img, .trade > img {
   filter: invert(1);
 }
 
-.event.activeTab > img, .shortlist.activeTab > img, .pokedex.activeTab > img {
+.event.activeTab > img, .shortlist.activeTab > img, .pokedex.activeTab > img, .trade.activeTab > img {
   filter: unset;
 }
 
