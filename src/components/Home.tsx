@@ -249,6 +249,7 @@ export const Home = () => {
           />
         </div>
         <div className={layoutStyles.content}>
+          { /* Don't change things here without causing the grid not to center: & > div > div > div > div */ }
           {activeTab === "shortlist" && filteredPokemons.length === 0 ? (
             <div className={layoutStyles.instructionsContainer}>
               <div className={layoutStyles.instructions}>
