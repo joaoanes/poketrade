@@ -9,9 +9,8 @@ export type LanguageContextType = {
   t: LanguageTranslator;
   language: TranslationType;
   setLanguage: (lang: TranslationType) => void;
-  translatePokemonName: (id: string) => string;
+  translatePokemonName: (id: keyof typeof pokemonNames) => string;
 }
-
 
 export type TranslationKeys = keyof typeof translations["en"]
 
@@ -23,6 +22,7 @@ const translations = {
 } as const
 
 export const LanguageContext = createContext<LanguageContextType | null>(null)
+export type PokemonIds = keyof typeof pokemonNames
 
 export const LanguageProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
   const [language, setLanguage] = useState<TranslationType>('en')
@@ -35,8 +35,10 @@ export const LanguageProvider: React.FC<{children: React.ReactNode}> = ({ childr
 
   const t : LanguageTranslator = (key) => texts[key] || key
 
-  const translatePokemonName = (id: string) => {
-    return (pokemonTranslations[id as keyof typeof pokemonNames])?.[language] || id
+  
+
+  const translatePokemonName = (id: keyof typeof pokemonNames) => {
+    return (pokemonTranslations[id])?.[language] || id
   }
 
   return (

@@ -7,7 +7,6 @@ import { useCallback, useEffect, useMemo, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import { SelectedPokemonModal } from "./SelectedPokemonModal"
 import Select from 'react-select'
-import VirtualPokeList from "./VirtualPokeList"
 import { ShinyCircle } from "./PokeCircle"
 
 import mons from '../data/filteredArrayWithShiny.json'
@@ -19,10 +18,9 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { CollapsibleFooter } from "./CollapsibleFooter"
 import { createTabs, TabId } from "@/data/tabs"
-import { PikachuFormKeys, usePikachuForms } from "../hooks/usePikachuForms"
-import GroupedPikachuList from './GroupedPokemonList'
-import { defaultPlaceholder } from "./DelayedLazyLoad"
+import { usePikachuForms } from "../hooks/usePikachuForms"
 import { useUrlState } from '@/providers/UrlStateProvider'
+import TabRenderer from "./TabRenderer"
 
 const TYPED_MONS: UsefulPokemonArray[] = mons as UsefulPokemonArray[]
 
@@ -117,15 +115,13 @@ export const Home = () => {
     filteredPokemons
   } = usePokemonFilter(listToShow)
 
-  const {
-    loadPikachuForms, getPikachuForm, isLoaded 
-  } = usePikachuForms()
+  const {loadPikachuForms} = usePikachuForms()
 
-  useEffect(() => {
-    if (activeTab === "pikachu") {
-      loadPikachuForms()
-    }
-  }, [activeTab, loadPikachuForms])
+  // useEffect(() => {
+  //   if (activeTab === "pikachu") {
+  //     loadPikachuForms()
+  //   }
+  // }, [activeTab, loadPikachuForms])
 
   const setSelected = useCallback((pokemon: UsefulPokemon | null) => {
     if (pokemon?.pokemonNumber === 25) {
@@ -249,61 +245,13 @@ export const Home = () => {
           />
         </div>
         <div className={layoutStyles.content}>
-          { /* Don't change things here without causing the grid not to center: & > div > div > div > div */ }
-          {activeTab === "shortlist" && filteredPokemons.length === 0 ? (
-            <div className={layoutStyles.instructionsContainer}>
-              <div className={layoutStyles.instructions}>
-                <div className={layoutStyles.instructionsTitle}>{t("instructionsTitle")}</div>
-                {t("instructions")}
-              </div>
-            </div>
-          ) : (
-            <div className={layoutStyles.containerWrapper}>
-              {activeTab && tabs.find(tab => tab.id === activeTab)?.title && (
-                <div className={layoutStyles.tabTitleContainer}>
-                  <div className={layoutStyles.tabTitle}>
-                    {tabs.find(tab => tab.id === activeTab)?.title}
-                  </div>
-                  <div className={layoutStyles.tabSubtitle}>
-                    {tabs.find(tab => tab.id === activeTab)?.subtitle}
-                  </div>
-                </div>
-              )}
-              <div className={layoutStyles.containerContainer}>
-                {activeTab === "pikachu" ? (
-                  isLoaded ? (
-                    <GroupedPikachuList
-                      pokemons={filteredPokemons}
-                      setSelected={setSelected}
-                      getPikachuForm={getPikachuForm}
-                      getGroupKey={(pokemon) => getPikachuForm(pokemon.imageId) || ''}
-                      getGroupTitle={(form) => t(`pikachuForms.${(form as PikachuFormKeys)}`)}
-                    />
-                  ) : (
-                    <div className={layoutStyles.loading}>
-                      <div className={layoutStyles.loadingPlaceholder}>{defaultPlaceholder}</div>
-                      <div className={layoutStyles.loadingText}>{t("loading")}</div>
-                    </div>
-                  )
-                ) : activeTab === "pokedex" ? (
-                  <GroupedPikachuList
-                    key={activeTab}
-                    pokemons={filteredPokemons}
-                    setSelected={setSelected}
-                    getPikachuForm={getPikachuForm}
-                    getGroupKey={(pokemon) => getPokemonNumberPadded(pokemon.pokemonNumber)}
-                    getGroupTitle={(number) => `#${number} - ${translatePokemonName(number as any)}`}
-                  />
-                ) : (
-                  <VirtualPokeList
-                    setSelected={setSelected}
-                    pokemons={filteredPokemons}
-                    key={activeTab}
-                  />
-                )}
-              </div>
-            </div>
-          )}
+          <TabRenderer
+            activeTab={activeTab}
+            filteredPokemons={filteredPokemons}
+            setSelected={setSelected}
+            tabs={tabs}
+            t={t}
+          />
         </div>
       </main>
       
