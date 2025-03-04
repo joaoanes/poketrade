@@ -1,9 +1,9 @@
 import React, { useCallback, FC, useContext } from 'react'
 import { FixedSizeGrid } from 'react-window'
-import {AutoSizer} from 'react-virtualized'
 import { UsefulPokemon } from "../junkyard/pokegenieParser"
 import { SelectionContext } from './SelectionWrapper'
 import PokeCell from './PokeCell'
+import { ClassedAutoSizer } from './ClassedAutosizer'
 
 type PokeListProps = {
   pokemons: UsefulPokemon[];
@@ -46,7 +46,7 @@ const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
   }), [pokemons, setSelected, isSelectedMap, toggleSelection])
 
   return (
-    <AutoSizer>
+    <ClassedAutoSizer>
       {(size) => {
         const { 
           columnWidth, 
@@ -78,7 +78,7 @@ const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
           </FixedSizeGrid>
         )
       }}
-    </AutoSizer>
+    </ClassedAutoSizer>
   )
 }
 

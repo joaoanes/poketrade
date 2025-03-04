@@ -1,11 +1,11 @@
 import React, { useMemo, useCallback } from 'react'
 import { VariableSizeGrid } from 'react-window'
-import { AutoSizer } from 'react-virtualized'
 import { UsefulPokemon } from '@/junkyard/pokegenieParser'
 import styles from '@/styles/groupedPikachu.module.css'
 import PokemonSquare from './PokemonSquare'
 import { Lato } from 'next/font/google'
 import { PikachuFormKeys } from '@/hooks/usePikachuForms'
+import { ClassedAutoSizer } from './ClassedAutosizer'
 
 const lato = Lato({
   weight: '400',
@@ -18,6 +18,8 @@ type GroupedPikachuListProps = {
   getPikachuForm: (imageId: string) => PikachuFormKeys | undefined
   getGroupKey: (pokemon: UsefulPokemon) => string
   getGroupTitle: (key: string) => string
+  width: number,
+  height: number,
 }
 const COLUMN_WIDTH = 100
 const HEADER_HEIGHT = 80
@@ -27,8 +29,9 @@ const GroupedPikachuList: React.FC<GroupedPikachuListProps> = ({
   setSelected,
   getGroupKey,
   getGroupTitle,
+  width,
+  height
 }) => {
-
   const {
     items, rowHeights, columnCount 
   } = useMemo(() => {
@@ -47,7 +50,7 @@ const GroupedPikachuList: React.FC<GroupedPikachuListProps> = ({
       .sort(([keyA], [keyB]) => keyA.localeCompare(keyB))
 
     // Calculate column count based on container width
-    const containerWidth = window.innerWidth
+    const containerWidth = width
     const columnCount = Math.floor(containerWidth / COLUMN_WIDTH)
 
     const items: (UsefulPokemon | string | null)[] = []
@@ -75,7 +78,7 @@ const GroupedPikachuList: React.FC<GroupedPikachuListProps> = ({
     return {
       items, rowHeights, columnCount 
     }
-  }, [pokemons, getGroupKey])
+  }, [pokemons, getGroupKey, width])
 
   const getRowHeight = useCallback((index: number) => rowHeights[index], [rowHeights])
 
@@ -156,29 +159,45 @@ const GroupedPikachuList: React.FC<GroupedPikachuListProps> = ({
     getTranslation: getGroupTitle
   }), [items, columnCount, pokemons, setSelected, getGroupTitle])
 
-  return (
-    <AutoSizer>
-      {({ width, height }) => {
-        const actualColumnCount = Math.floor(width / COLUMN_WIDTH)
-        const itemData = getItemData()
-        
-        return width === 0 || height === 0 ? null : (
-          <VariableSizeGrid
-            columnCount={actualColumnCount}
-            columnWidth={() => 100}
-            height={height}
-            overscanRowCount={10}
-            rowCount={rowHeights.length}
-            rowHeight={getRowHeight}
-            width={width}
-            itemData={itemData}
-          >
-            {Cell}
-          </VariableSizeGrid>
-        )
-      }}
-    </AutoSizer>
+  const itemData = getItemData()
+  
+  return width === 0 || height === 0 ? null : (
+    <VariableSizeGrid
+      columnCount={columnCount}
+      columnWidth={() => 100}
+      height={height}
+      overscanRowCount={10}
+      rowCount={rowHeights.length}
+      rowHeight={getRowHeight}
+      width={width}
+      itemData={itemData}
+    >
+      {Cell}
+    </VariableSizeGrid>
   )
+
 }
 
-export default GroupedPikachuList
+
+type AutosizedGroupedPikachuListProps = Omit<GroupedPikachuListProps, "width" | "height">
+
+const AutosizedGroupedPikachuList = (props: AutosizedGroupedPikachuListProps) => {
+  return (
+    <ClassedAutoSizer>
+      {
+        ({ width, height }) => (
+          (width === 0 || height === 0) ? null : (
+            <GroupedPikachuList 
+              {...props} 
+              width={width} 
+              height={height} 
+            />
+          )
+        )
+      }
+    </ClassedAutoSizer>
+  )
+
+}
+
+export default AutosizedGroupedPikachuList
