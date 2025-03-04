@@ -4,17 +4,16 @@ import jp from '../translations/jp.json'
 import pokemonNames from '../translations/pokemonNames.json'
 
 export type TranslationType = 'en' | 'jp'
+export type PokemonIds = keyof typeof pokemonNames
+export type TranslationKeys = keyof typeof translations["en"]
+export type LanguageTranslator = (key: TranslationKeys) => string
 
 export type LanguageContextType = {
   t: LanguageTranslator;
   language: TranslationType;
   setLanguage: (lang: TranslationType) => void;
-  translatePokemonName: (id: keyof typeof pokemonNames) => string;
+  translatePokemonName: (id: PokemonIds) => string;
 }
-
-export type TranslationKeys = keyof typeof translations["en"]
-
-export type LanguageTranslator = (key: TranslationKeys) => string
 
 const translations = {
   en,
@@ -22,7 +21,6 @@ const translations = {
 } as const
 
 export const LanguageContext = createContext<LanguageContextType | null>(null)
-export type PokemonIds = keyof typeof pokemonNames
 
 export const LanguageProvider: React.FC<{children: React.ReactNode}> = ({ children }) => {
   const [language, setLanguage] = useState<TranslationType>('en')
@@ -37,7 +35,7 @@ export const LanguageProvider: React.FC<{children: React.ReactNode}> = ({ childr
 
   
 
-  const translatePokemonName = (id: keyof typeof pokemonNames) => {
+  const translatePokemonName = (id: PokemonIds) => {
     return (pokemonTranslations[id])?.[language] || id
   }
 
