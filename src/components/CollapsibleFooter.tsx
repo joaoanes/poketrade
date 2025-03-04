@@ -24,10 +24,6 @@ export const CollapsibleFooter = ({
   const [isExpanded, setIsExpanded] = useState(true)
   const [showExtraInfo, setShowExtraInfo] = useState(false)
 
-  const toggleExtraInfo = () => {
-    setShowExtraInfo(prev => !prev)
-  }
-
   return (
     <div className={`${styles.footer} ${!isExpanded ? styles.collapsed : ''}`}>
       {isExpanded ? (
@@ -49,14 +45,14 @@ export const CollapsibleFooter = ({
 
             <div
               className={styles.lastUpdated}
-              onClick={toggleExtraInfo}
+              onClick={() => setShowExtraInfo(prev => !prev)}
             >
               {t('lastUpdatedDate') + " " + LAST_UPDATED }
             </div>
             {showExtraInfo && (
               <div 
                 className={styles.extraInfo}
-                onClick={toggleExtraInfo}
+                onClick={() => setShowExtraInfo(prev => !prev)}
               >
                 <div>{t('shinyImageClassifier')}: {SHINY_CLASSIFIER}</div>
                 <div>{t('pikachuFormsClassifier')}: {PIKACHU_CLASSIFIER}</div>

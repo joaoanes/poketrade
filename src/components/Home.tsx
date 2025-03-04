@@ -216,7 +216,7 @@ export const Home = () => {
           </div>
           <input
             checked={shiniesOnly}
-            onClick={() => toggleShinies(!shiniesOnly)}
+            onChange={() => toggleShinies(!shiniesOnly)}
             type='checkbox'
           >
           </input>
