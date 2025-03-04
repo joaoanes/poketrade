@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 import styles from "@/styles/pokesquare.module.css"
 import React from "react"

@@ -6,7 +6,6 @@ import { useTranslation } from "@/junkyard/useTranslation"
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import { SelectedPokemonModal } from "./SelectedPokemonModal"
-import Select from 'react-select'
 import { ShinyCircle } from "./PokeCircle"
 
 import mons from '../data/filteredArrayWithShiny.json'
@@ -21,6 +20,9 @@ import { createTabs, TabId } from "@/data/tabs"
 import { usePikachuForms } from "../hooks/usePikachuForms"
 import { useUrlState } from '@/providers/UrlStateProvider'
 import TabRenderer from "./TabRenderer"
+import dynamic from "next/dynamic"
+
+const Select = dynamic(() => import('react-select'), { ssr: false })
 
 const TYPED_MONS: UsefulPokemonArray[] = mons as UsefulPokemonArray[]
 
@@ -228,6 +230,7 @@ export const Home = () => {
               label: currentFilter === "ALL" ? t("all") : `#${currentFilter} - ${translatePokemonName(currentFilter as any)}`
             }}
             onChange={handleFilterChange}
+            instanceId={3}
             options={[
               {
                 value: "ALL",
