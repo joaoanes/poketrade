@@ -19,7 +19,7 @@ const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
   }, [selectedIds])
 
   const getGridParams = useCallback(
-    ({ width, height }: { width: number, height: number }) => {
+    ({ width }: { width: number, height: number }) => {
       const columnWidth = 100
       const rowHeight = 120
       const columnCount = Math.floor(width / columnWidth) || 1 // Avoid division by zero
@@ -28,9 +28,7 @@ const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
         columnWidth,
         rowHeight,
         columnCount,
-        rowCount,
-        width,
-        height 
+        rowCount
       }
     }, 
     [pokemons.length]
@@ -52,16 +50,14 @@ const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
           columnWidth, 
           rowHeight, 
           columnCount, 
-          rowCount, 
-          width, 
-          height 
+          rowCount
         } = getGridParams(size)
         const itemData = getItemData(columnCount)
 
         return (
           <FixedSizeGrid
-            height={height}
-            width={width}
+            height={size.height}
+            width={size.width}
             columnWidth={columnWidth}
             rowHeight={rowHeight}
             columnCount={columnCount}
@@ -71,7 +67,7 @@ const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
               ({
                 columnIndex, rowIndex, data 
               }) => 
-                `${data.pokemons[rowIndex * columnCount + columnIndex]?.imageId}`
+                `${columnIndex}-${rowIndex}-${data.pokemons[rowIndex * columnCount + columnIndex]?.imageId}`
             } // Better key format
           >
             {PokeCell}
