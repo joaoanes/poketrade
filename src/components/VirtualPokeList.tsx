@@ -66,8 +66,11 @@ const VirtualPokeList: FC<PokeListProps> = ({ pokemons, setSelected }) => {
             itemKey={
               ({
                 columnIndex, rowIndex, data 
-              }) => 
-                `${columnIndex}-${rowIndex}-${data.pokemons[rowIndex * columnCount + columnIndex]?.imageId}`
+              }) => {
+                const imageId : string | null = data.pokemons[rowIndex * columnCount + columnIndex]?.imageId
+                return imageId !== undefined ? imageId : `empty-${columnIndex}-${rowIndex}`
+              }
+                
             } // Better key format
           >
             {PokeCell}

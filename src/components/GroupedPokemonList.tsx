@@ -171,6 +171,16 @@ const GroupedPikachuList: React.FC<GroupedPikachuListProps> = ({
       rowHeight={getRowHeight}
       width={width}
       itemData={itemData}
+      itemKey={({columnIndex, rowIndex}) => {
+        const item = items[rowIndex * columnCount + columnIndex]
+        if (typeof item === 'string') {
+          return `header-${item}`
+        }
+        if (item === null) {
+          return `empty-${columnIndex}-${rowIndex}`
+        }
+        return item.imageId
+      }}
     >
       {Cell}
     </VariableSizeGrid>
