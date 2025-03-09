@@ -200,12 +200,13 @@ export const Home = () => {
       />
       {selectedPokemon && (
         <SelectedPokemonModal
+          allPokemon={allPokemons}
           translatePokemonName={translatePokemonName}
           selectedPokemon={selectedPokemon}
           setSelected={setSelected}
           addToTradeList={() => handleChangeToTradeList(selectedPokemon, true)}
           removeFromTradeList={() => handleChangeToTradeList(selectedPokemon, false)}
-          isOnTradeList={tradeList.findIndex(p => p.imageId === selectedPokemon.imageId) !== -1}
+          isOnTradeList={(pkmn) => tradeList.findIndex(p => p.imageId === pkmn.imageId) !== -1}
         />
       )}
       <main className={layoutStyles.main}>

@@ -1,47 +1,64 @@
-"use client"
-import React from "react"
-import styles from "@/styles/modal.module.css"
-import buttonStyles from "@/styles/common.module.css"
-import { getPokemonNumberPadded } from "@/junkyard/misc"
-import { UsefulPokemon } from "@/junkyard/pokegenieParser"
-import { toast } from "react-toastify"
-import { usePikachuForms } from "../hooks/usePikachuForms"
-import { useTranslation } from "@/junkyard/useTranslation"
-import ProgressiveImage from "./ProgressiveImage"
+import React, { useRef, useCallback } from 'react'
+import { FixedSizeList as List, ListChildComponentProps, ListOnScrollProps } from 'react-window'
+import styles from '@/styles/modal.module.css'
+import PokemonDetails from './PokemonDetails'
+import { UsefulPokemon } from '@/junkyard/pokegenieParser'
+import { debounce } from 'lodash'
+import AnimatedList from './AnimatedList'
+import { AutoSizer } from 'react-virtualized'
+import { PokemonIds } from '@/providers/LanguageProvider'
 
 export type SelectedPokemonModalProps = {
   selectedPokemon: UsefulPokemon;
-  translatePokemonName: (any: any) => string;
-  setSelected: (any: any) => void;
+  allPokemon: UsefulPokemon[];
+  translatePokemonName: (id: PokemonIds) => string;
+  setSelected: (pokemon: UsefulPokemon | null) => void;
   addToTradeList: (pokemon: UsefulPokemon) => void;
   removeFromTradeList: (pokemon: UsefulPokemon) => void;
-  isOnTradeList: boolean;
+  isOnTradeList: (pokemon: UsefulPokemon) => boolean;
 }
 
 export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
-  selectedPokemon, 
-  setSelected, 
-  addToTradeList, 
+  selectedPokemon,
+  allPokemon,
+  translatePokemonName,
+  setSelected,
+  addToTradeList,
   removeFromTradeList,
-  isOnTradeList, 
-  translatePokemonName
+  isOnTradeList,
 }) => {
-  const { getPikachuForm, loadPikachuForms } = usePikachuForms()
-  const { t } = useTranslation()
-  React.useEffect(() => {
-    if (selectedPokemon.pokemonNumber === 25) {
-      loadPikachuForms()
+  const listRef = useRef<List & {animatedScrollTo : (index: number) => void}>(null)
+
+  const index = allPokemon.findIndex(({imageId}) => imageId === selectedPokemon.imageId)
+
+
+  const Row = useCallback(({ index, style } : ListChildComponentProps) => (
+    <div
+      style={style}
+    >
+      <PokemonDetails
+        pokemon={allPokemon[index]}
+        translatePokemonName={translatePokemonName}
+        addToTradeList={addToTradeList}
+        removeFromTradeList={removeFromTradeList}
+        isOnTradeList={isOnTradeList(allPokemon[index])}
+      />
+    </div>
+  ), [])
+
+  const myScroll 
+    = (event: ListOnScrollProps, width: number) => {
+      if (event.scrollOffset === 0 || !listRef.current || width === 0) {
+        return
+      }
+      const index = Math.round(event.scrollOffset / width)
+      console.log({
+        event, index, width 
+      })
+      listRef.current.animatedScrollTo(index)
+      setSelected(allPokemon[index])
     }
-  }, [selectedPokemon, loadPikachuForms])
-
-  const pikachuForm = selectedPokemon.pokemonNumber === 25 
-    ? getPikachuForm(selectedPokemon.imageId) 
-    : undefined
-
-  const handleShare = async () => {
-    await navigator.clipboard.writeText(window.location.href)
-    toast.success(t('urlCopied'))
-  }
+  
 
   return (
     <div
@@ -50,84 +67,27 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
     >
       <div
         className={styles.modalContent}
-        onClick={(e) => e.stopPropagation()}
       >
-        <div className={styles.infoBox}>
-          
-          <ProgressiveImage
-            className={styles.bigImg}
-            selectedPokemon={selectedPokemon}
-            alt={
-                translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)
-              }
-          >
-          </ProgressiveImage>
-          
-          <div className={styles.right}>
-            <div className={styles.modalName}>
-              <div className={selectedPokemon.shinyOutput === 1 ? styles.shiny : ""}>{translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)}
-              </div>
-              <div className={styles.modalNumber}>
-                #{selectedPokemon.pokemonNumber}
-              </div>
-            </div>
-            {pikachuForm && (
-              <div className={styles.modalForm}>
-                {t(`pikachuForms.${pikachuForm}`)}
-              </div>
-            )}
-            <div className={styles.modalCp}>
-              CP:
-              {selectedPokemon.cp}
-            </div>
-            {
-              window?.location.toString() === "http://localhost:3000/"  && (
-                <div className={styles.modalCp}>
-                  shiny output:
-                  {selectedPokemon.shinyOutput}
-                </div>
-              )
-            }
-            <div className={styles.modalCaptured}>
-              {t("capturedAt")}
-              :
-              {' '}
-              {new Date(selectedPokemon.captureDate).toLocaleDateString()}
-            </div>
-            {isOnTradeList ? (
-              <button
-                className={`${buttonStyles.button} ${styles.modalButton}`}
-                onClick={() => removeFromTradeList(selectedPokemon)}
+        <AutoSizer>
+          {({ width, height }) => {
+            if (width === 0) return null 
+            return (
+              <AnimatedList
+                ref={listRef}
+                height={height}
+                width={width}
+                onScroll={debounce(e => myScroll(e, width), 200)} 
+                itemSize={width}
+                overscanCount={10}
+                initialScrollOffset={index * width}
+                itemCount={allPokemon.length}
+                layout="horizontal"
               >
-                {t('removeFromShortlist')}
-                <img 
-                  width={25} 
-                  src="./star.svg" 
-                  alt="star"
-                />
-              </button>
-            ) : (
-              <button
-                className={`${buttonStyles.button} ${styles.modalButton}`}
-                onClick={() => addToTradeList(selectedPokemon)}
-              >
-                {t('addToShortlist')}
-                <img
-                  width={25}
-                  src="./star.svg"
-                  alt="star"
-                />
-              </button>
-            )}
-          </div>
-        </div>
-        
-        <button
-          className={`${buttonStyles.button} ${styles.shareButton}`}
-          onClick={handleShare}
-        >
-          {t('share')}
-        </button>
+                {Row}
+              </AnimatedList>
+            )
+          }}
+        </AutoSizer>
       </div>
     </div>
   )

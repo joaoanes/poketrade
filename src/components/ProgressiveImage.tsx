@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import styles from '../styles/progressiveImage.module.css'
 import { UsefulPokemon } from '@/junkyard/pokegenieParser'
 import { S3_BUCKET_URL } from '@/junkyard/env'
@@ -34,4 +34,4 @@ const ProgressiveImage = ({
   )
 }
 
-export default ProgressiveImage
+export default React.memo(ProgressiveImage)
