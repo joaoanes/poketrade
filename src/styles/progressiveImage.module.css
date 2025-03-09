@@ -1,0 +1,30 @@
+.container {
+    position: relative;
+  }
+  
+  .image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: opacity 0.2s ease-out;
+    object-fit: cover;
+  }
+  
+  .thumbnail {
+    width: 250px;
+    height: 250px;
+    filter: blur(20px);
+  }
+  
+  .fullImage {
+    width: 250px;
+    height: 250px;
+    opacity: 0;
+  }
+  
+  .fullImageLoaded {
+    opacity: 1;
+  }
+  

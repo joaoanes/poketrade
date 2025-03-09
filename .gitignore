@@ -38,10 +38,8 @@ yarn-error.log*
 next-env.d.ts
 
 /images
-/support/images/thumbs
-/support/images/pokes
-/support/images/scans
-
+/support/images/*/  
+/support/images/*/*
 /support/*/*.json
 
 /src/junkyard/*.json

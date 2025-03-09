@@ -2,13 +2,12 @@
 import React from "react"
 import styles from "@/styles/modal.module.css"
 import buttonStyles from "@/styles/common.module.css"
-import { S3_BUCKET_URL } from "@/junkyard/env"
 import { getPokemonNumberPadded } from "@/junkyard/misc"
 import { UsefulPokemon } from "@/junkyard/pokegenieParser"
 import { toast } from "react-toastify"
 import { usePikachuForms } from "../hooks/usePikachuForms"
 import { useTranslation } from "@/junkyard/useTranslation"
-
+import ProgressiveImage from "./ProgressiveImage"
 
 export type SelectedPokemonModalProps = {
   selectedPokemon: UsefulPokemon;
@@ -54,16 +53,16 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles.infoBox}>
-          <div>
-            <img
-              className={styles.bigImg}
-              src={`${S3_BUCKET_URL}/pokes/${selectedPokemon.imageId}.png`}
-              alt={
+          
+          <ProgressiveImage
+            className={styles.bigImg}
+            selectedPokemon={selectedPokemon}
+            alt={
                 translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)
               }
-            >
-            </img>
-          </div>
+          >
+          </ProgressiveImage>
+          
           <div className={styles.right}>
             <div className={styles.modalName}>
               <div className={selectedPokemon.shinyOutput === 1 ? styles.shiny : ""}>{translatePokemonName(getPokemonNumberPadded(selectedPokemon.pokemonNumber) as any)}
