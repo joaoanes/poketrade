@@ -19,11 +19,15 @@
   border-radius: 10px;
   max-width: 520px;
   
+  
   display: flex;
-  height: 300px;
+  height: 320px;
   width: 520px;
   flex-direction: column;
   gap: 20px;
+  & > div > div {
+    overflow-y: hidden !important;
+  }
 }
 
 .infoBox {

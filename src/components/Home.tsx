@@ -157,7 +157,7 @@ export const Home = () => {
       removePokemon(pokemon)
     }
     toast.success(`${translatePokemonName(getPokemonNumberPadded(pokemon.pokemonNumber) as any)} ${isAdding ? t('pokemonAddedToShortlist') : t('pokemonRemovedFromShortlist')}`)
-    setSelectedPkmn(null)
+    
   }, [addPokemon, removePokemon, t, translatePokemonName])
 
 
@@ -176,6 +176,22 @@ export const Home = () => {
     setShiniesOnly(value)
     updateUrlState({ shiny: value })
   }, [setShiniesOnly, updateUrlState])
+
+  const isOnTradeList = useCallback(
+    (pkmn: UsefulPokemon) => 
+      tradeList.findIndex(p => p.imageId === pkmn.imageId) !== -1
+    , [tradeList]
+  )
+
+  const addToTradeList = useCallback(
+    (pokemon: UsefulPokemon) => handleChangeToTradeList(pokemon, true), 
+    [handleChangeToTradeList, tradeList]
+  )
+
+  const removeFromTradeList = useCallback(
+    (pokemon: UsefulPokemon) => handleChangeToTradeList(pokemon, false), 
+    [handleChangeToTradeList, tradeList]
+  )
   
   return (
     <div className={layoutStyles.mainContainer}>
@@ -200,13 +216,13 @@ export const Home = () => {
       />
       {selectedPokemon && (
         <SelectedPokemonModal
-          allPokemon={allPokemons}
+          allPokemon={filteredPokemons}
           translatePokemonName={translatePokemonName}
           selectedPokemon={selectedPokemon}
           setSelected={setSelected}
-          addToTradeList={() => handleChangeToTradeList(selectedPokemon, true)}
-          removeFromTradeList={() => handleChangeToTradeList(selectedPokemon, false)}
-          isOnTradeList={(pkmn) => tradeList.findIndex(p => p.imageId === pkmn.imageId) !== -1}
+          addToTradeList={addToTradeList}
+          removeFromTradeList={removeFromTradeList}
+          isOnTradeList={isOnTradeList}
         />
       )}
       <main className={layoutStyles.main}>

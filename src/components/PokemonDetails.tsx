@@ -1,4 +1,3 @@
-// PokemonDetails.tsx
 import React from 'react'
 import styles from '@/styles/modal.module.css'
 import buttonStyles from '@/styles/common.module.css'
@@ -14,7 +13,7 @@ interface PokemonDetailsProps {
   translatePokemonName: (id: PokemonIds) => string
   addToTradeList: (pokemon: UsefulPokemon) => void
   removeFromTradeList: (pokemon: UsefulPokemon) => void
-  isOnTradeList: boolean
+  isOnTradeList: (pokemon: UsefulPokemon) => boolean
 }
 
 const PokemonDetails: React.FC<PokemonDetailsProps> = ({
@@ -26,6 +25,8 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({
 }) => {
   const { getPikachuForm, loadPikachuForms } = usePikachuForms()
   const { t } = useTranslation()
+
+  const onTradeList = isOnTradeList(pokemon)
 
   React.useEffect(() => {
     if (pokemon.pokemonNumber === 25) {
@@ -64,31 +65,18 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({
         <div className={styles.modalCaptured}>
           {t('capturedAt')}: {new Date(pokemon.captureDate).toLocaleDateString()}
         </div>
-        {isOnTradeList ? (
-          <button
-            className={`${buttonStyles.button} ${styles.modalButton}`}
-            onClick={() => removeFromTradeList(pokemon)}
-          >
-            {t('removeFromShortlist')}
-            <img
-              width={25}
-              src='./star.svg'
-              alt='star'
-            />
-          </button>
-        ) : (
-          <button
-            className={`${buttonStyles.button} ${styles.modalButton}`}
-            onClick={() => addToTradeList(pokemon)}
-          >
-            {t('addToShortlist')}
-            <img
-              width={25}
-              src='./star.svg'
-              alt='star'
-            />
-          </button>
-        )}
+
+        <button
+          className={`${buttonStyles.button} ${styles.modalButton}`}
+          onClick={() => onTradeList ? removeFromTradeList(pokemon) : addToTradeList(pokemon)}
+        >
+          {onTradeList ? t('removeFromShortlist') : t('addToShortlist')}
+          <img
+            width={25}
+            src='./star.svg'
+            alt='star'
+          />
+        </button>
       </div>
     </div>
   )
