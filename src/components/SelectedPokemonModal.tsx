@@ -43,6 +43,7 @@ export const SelectedPokemonModal: React.FC<SelectedPokemonModalProps> = ({
         />
       </div>
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [isOnTradeList] 
   )
 

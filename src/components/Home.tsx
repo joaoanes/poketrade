@@ -185,12 +185,12 @@ export const Home = () => {
 
   const addToTradeList = useCallback(
     (pokemon: UsefulPokemon) => handleChangeToTradeList(pokemon, true), 
-    [handleChangeToTradeList, tradeList]
+    [handleChangeToTradeList]
   )
 
   const removeFromTradeList = useCallback(
     (pokemon: UsefulPokemon) => handleChangeToTradeList(pokemon, false), 
-    [handleChangeToTradeList, tradeList]
+    [handleChangeToTradeList]
   )
   
   return (

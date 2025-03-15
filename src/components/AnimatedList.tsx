@@ -66,7 +66,7 @@ const AnimatedList = forwardRef(({
       const index = Math.round(scrollOffsetRef.current / itemSize)
       onAnimationComplete(index)
     }
-  }, [duration, easing, onAnimationComplete, cancelAnimation])
+  }, [duration, easing, onAnimationComplete, cancelAnimation, itemSize])
   
   const animatedScrollTo = useCallback((index: number) => {
     cancelAnimation()
