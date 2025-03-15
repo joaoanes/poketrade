@@ -1,4 +1,6 @@
 import { readFile, writeFile } from "fs/promises"
+import { UsefulPokemon } from '../../src/junkyard/pokegenieParser'
+import { isShiny, IsShinyUsefulPokemonView } from '../../src/junkyard/shinySupport'
 
 // Get the input file from the arguments
 const [inputFile] = process.argv.slice(2)
@@ -14,14 +16,17 @@ const normalizeFile = async () => {
 
     // Normalize the data
     const normalizedData = data.map((entry: any[]) => {
-      const normalizedValue = entry[entry.length - 1] > 0.9999 ? 1 : 0
+      const mockPokemon : IsShinyUsefulPokemonView = {
+        shinyOutput: entry[entry.length - 1],
+        pokemonName: entry[0]
+      }
+      const normalizedValue = isShiny(mockPokemon) ? 1 : 0
       return [...entry.slice(0, -1), normalizedValue]
     })
 
     // Write the normalized data to a new file
     const outputFile = inputFile.replace(/\.json$/, "_normalized.json")
-    await writeFile(outputFile, JSON.stringify(normalizedData, null, 2))
-
+    await writeFile(outputFile, JSON.stringify(normalizedData, null, 0))
     console.log(`Normalized file written to ${outputFile}`)
   } catch (error) {
     console.error("Error:", error)

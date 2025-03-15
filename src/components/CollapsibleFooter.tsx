@@ -4,7 +4,7 @@ import commonStyles from "@/styles/common.module.css"
 import React from 'react'
 import { LanguageTranslator } from '@/providers/LanguageProvider'
 
-const LAST_UPDATED = "23/11/2024"
+const LAST_UPDATED = "28/02/2025"
 const PIKACHU_CLASSIFIER = "pika-2"
 const SHINY_CLASSIFIER = "simplex-hsv-g-sam"
 

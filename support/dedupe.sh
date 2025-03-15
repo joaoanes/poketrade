@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euxo pipefail
+
 
 usage() {
     echo "Usage: $0 [input_file] [output_file]"
@@ -29,6 +29,8 @@ else
     exit 1
 fi
 
+set -euxo pipefail
+
 if [[ ! -f "$input_file" ]]; then
     echo "Error: Input file '$input_file' does not exist."
     exit 1
@@ -42,7 +44,7 @@ fi
 
 input_count=$(jq 'length' "$input_file")
 
-jq -c 'unique_by(.[4]) | sort_by(.[1])' "$input_file" > "$output_file"
+jq -c 'unique_by([.[1], .[2], .[3], .[5]] | join("-")) | sort_by(.[1])' "$input_file" > "$output_file"
 
 output_count=$(jq 'length' "$output_file")
 

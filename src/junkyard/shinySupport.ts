@@ -1,9 +1,10 @@
 import { UsefulPokemon } from "./pokegenieParser"
 
-const harshComparison = (pokemon: UsefulPokemon) => pokemon.shinyOutput === 1
+const harshComparison = (pokemon: IsShinyUsefulPokemonView) => pokemon.shinyOutput === 1
 const harshWhitelist = ['Unown'].map(e => e.toLocaleLowerCase())
 
-export const isShiny = (pokemon: UsefulPokemon) => {
+export type IsShinyUsefulPokemonView = Pick<UsefulPokemon, 'pokemonName' | 'shinyOutput'>
+export const isShiny = (pokemon: IsShinyUsefulPokemonView) => {
   if (harshWhitelist.includes(pokemon.pokemonName.toLocaleLowerCase())) {
     return harshComparison(pokemon)
   }
