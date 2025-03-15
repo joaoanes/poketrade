@@ -1,12 +1,17 @@
 import { UsefulPokemon } from "./pokegenieParser"
 
-const harshComparison = (pokemon: IsShinyUsefulPokemonView) => pokemon.shinyOutput === 1
-const harshWhitelist = ['Unown'].map(e => e.toLocaleLowerCase())
+const customResolvers : Record<string, (pokemon: IsShinyUsefulPokemonView) => boolean> = {
+  unown: (pokemon) => pokemon.shinyOutput === 1,
+  sprigatito: (pokemon) => pokemon.shinyOutput > 0.99999
+}
+
+const getShinyResolver = (pokemonName: string) => (
+  customResolvers[pokemonName.toLocaleLowerCase()] 
+  || ((pokemon: IsShinyUsefulPokemonView) => pokemon.shinyOutput > 0.999)
+)
 
 export type IsShinyUsefulPokemonView = Pick<UsefulPokemon, 'pokemonName' | 'shinyOutput'>
 export const isShiny = (pokemon: IsShinyUsefulPokemonView) => {
-  if (harshWhitelist.includes(pokemon.pokemonName.toLocaleLowerCase())) {
-    return harshComparison(pokemon)
-  }
-  return pokemon.shinyOutput > 0.999
+  const resolver = getShinyResolver(pokemon.pokemonName)
+  return resolver(pokemon)
 }

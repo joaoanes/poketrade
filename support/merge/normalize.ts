@@ -1,5 +1,4 @@
 import { readFile, writeFile } from "fs/promises"
-import { UsefulPokemon } from '../../src/junkyard/pokegenieParser'
 import { isShiny, IsShinyUsefulPokemonView } from '../../src/junkyard/shinySupport'
 
 // Get the input file from the arguments
