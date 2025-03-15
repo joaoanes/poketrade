@@ -96,7 +96,7 @@ export const Home = () => {
     }
     return null
   })
-  const [showTradeList, setShowTradeList] = useState(false)
+
   const [activeTab, setActiveTab] = useState<TabId | undefined>(() => urlState.tab)
 
   const tabs = useMemo(
@@ -162,9 +162,9 @@ export const Home = () => {
 
 
   const uniquePokemonNumbers = useMemo(() => {
-    const listToUse = showTradeList ? tradeList : TYPED_MONS.map((mon) => convertFromArray(mon))
+    const listToUse = activeTab === 'shortlist' ? tradeList : TYPED_MONS.map((mon) => convertFromArray(mon))
     return Array.from(new Set(listToUse.map(mon => mon.pokemonNumber))).map(num => getPokemonNumberPadded(num))
-  }, [tradeList, showTradeList])
+  }, [activeTab, tradeList])
 
   const handleTabClick = useCallback((tab: TabId) => {
     const newTab = activeTab === tab ? undefined : tab
@@ -277,12 +277,6 @@ export const Home = () => {
       
       <CollapsibleFooter
         t={t}
-        showTradeList={showTradeList}
-        tradeListLength={tradeList.length}
-        onToggleTradeList={() => {
-          setFilter("ALL")
-          setShowTradeList(!showTradeList)
-        }}
         onCopyFriendCode={copyFriendCodeToClipboard}
       />
 
