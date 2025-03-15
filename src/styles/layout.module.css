@@ -7,6 +7,16 @@
   color: black;
 }
 
+.messageText {
+  text-align: center;
+  font-size: 15px;
+}
+
+.smallText {
+  margin-top: 10px;
+  font-size: 12px;
+}
+
 .content {
   width: 80%;
   flex-grow: 1;

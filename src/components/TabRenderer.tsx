@@ -60,6 +60,10 @@ const ShortlistRenderer: React.FC<GenericTabProps> = React.memo(({
             {t('instructionsTitle')}
           </div>
           {t('instructions')}
+          <div className={layoutStyles.messageText}>
+            <div>{t('shortlistIntro')}</div>
+            <div className={layoutStyles.smallText}>{t('shortlistIntro2')}</div>
+          </div>
         </div>
       </div>
     )

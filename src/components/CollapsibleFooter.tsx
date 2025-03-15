@@ -10,15 +10,11 @@ const SHINY_CLASSIFIER = "simplex-hsv-g-sam"
 
 interface CollapsibleFooterProps {
   t: LanguageTranslator
-  showTradeList: boolean
-  tradeListLength: number
-  onToggleTradeList: () => void
   onCopyFriendCode: () => void
 }
 
 export const CollapsibleFooter = ({
   t,
-  showTradeList,
   onCopyFriendCode
 }: CollapsibleFooterProps) => {
   const [isExpanded, setIsExpanded] = useState(true)
@@ -30,17 +26,10 @@ export const CollapsibleFooter = ({
         <>
           <div className={styles.footerContent}>
             <div>
-              {showTradeList ? (
-                <div className={styles.messageText}>
-                  <div>{t('shortlistIntro')}</div>
-                  <div className={styles.smallText}>{t('shortlistIntro2')}</div>
-                </div>
-              ) : (
-                <div className={styles.messageText}>
-                  <div>{t('welcome')}</div>
-                  <div>{t('welcome2')}</div>
-                </div>
-              )}
+              <div className={styles.messageText}>
+                <div>{t('welcome')}</div>
+                <div>{t('welcome2')}</div>
+              </div>
             </div>
 
             <div
